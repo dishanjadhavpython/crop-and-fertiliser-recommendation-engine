@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Regur — crop &amp; fertiliser engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="horizon" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="mark">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 3 C10 10, 6 15, 6 21 a10 10 0 0 0 20 0 C26 15, 22 10, 16 3 Z"/>
+      <path class="vein" d="M16 8 V27 M16 15 L11 11 M16 15 L21 11 M16 21 L10 17 M16 21 L22 17"/>
+    </svg>
+    <div>
+      <b>REGUR</b>
+      <span>Crop &amp; fertiliser engine · Maharashtra</span>
+    </div>
+  </div>
+  <div class="masthead-meta">
+    <span class="stat"><i>351</i> talukas</span>
+    <span class="stat"><i>8</i> years of labels</span>
+    <span class="stat"><i>78</i> crops dosed</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ─────────────────────────── console ─────────────────────────── -->
+  <section class="console" id="console">
+    <div class="console-lede">
+      <p class="eyebrow">Ask the engine</p>
+      <h1><span class="ln"><i>Where are you</i></span><span class="ln"><em><i>sowing?</i></em></span></h1>
+      <p class="sub">Pick a taluka and a season. Add your Soil Health Card numbers if you
+        have them — the engine falls back to the taluka survey if you don't.</p>
+
+      <ol class="stages">
+        <li><b>S1</b><span><i>Ranks the candidates.</i> LambdaMART, trained on what
+          farmers in comparable districts actually planted.<em>learned</em></span></li>
+        <li><b>S2</b><span><i>Vetoes the impossible.</i> FAO and ICAR envelopes
+          combined by Liebig's minimum — no labels involved.<em>rules</em></span></li>
+        <li><b>S3</b><span><i>Places the yield.</i> Below, typical or above this
+          crop's own norm, with a calibrated band.<em>learned</em></span></li>
+        <li><b>S4</b><span><i>Doses the fertiliser.</i> Exact government table
+          lookup, then interpolation and micronutrients.<em>lookup</em></span></li>
+      </ol>
+    </div>
+
+    <div class="atlas-wrap">
+      <div class="atlas-frame">
+        <svg id="atlas" viewBox="0 0 620 500" role="group"
+             aria-label="Maharashtra: 351 talukas, shaded by aridity. Use arrow keys to move between talukas, Enter to select."></svg>
+        <div class="atlas-legend">
+          <b class="tick" id="ar-lo"></b>
+          <span class="ar-scale" aria-hidden="true"></span>
+          <b class="tick" id="ar-hi"></b>
+          <b>aridity P/ET&#8320;</b>
+        </div>
+        <p class="atlas-read" id="atlas-read">351 talukas · shaded by aridity</p>
+      </div>
+    </div>
+
+    <form class="panel" id="query" autocomplete="off">
+      <div class="field field-place">
+        <label for="taluka">Taluka</label>
+        <div class="combo">
+          <input id="taluka" type="text" placeholder="Start typing — Karvir, Sangole, Niphad…"
+                 role="combobox" aria-expanded="false" aria-controls="taluka-list" aria-autocomplete="list">
+          <ul id="taluka-list" class="options" role="listbox" hidden></ul>
+        </div>
+        <p class="hint" id="district-hint">&nbsp;</p>
+      </div>
+
+      <div class="field">
+        <label id="season-label">Season</label>
+        <div class="pills" role="radiogroup" aria-labelledby="season-label" id="seasons"></div>
+      </div>
+
+      <div class="field field-water">
+        <label id="water-label">Water</label>
+        <div class="toggle" role="radiogroup" aria-labelledby="water-label">
+          <button type="button" class="on" data-irr="false" role="radio" aria-checked="true">Rainfed</button>
+          <button type="button" data-irr="true" role="radio" aria-checked="false">Irrigated</button>
+        </div>
+      </div>
+
+      <details class="soil">
+        <summary>
+          <span>Soil Health Card values</span>
+          <small>optional</small>
+        </summary>
+        <div class="soil-grid">
+          <label>Nitrogen<input type="number" id="n" step="1" placeholder="kg/ha"><i>N</i></label>
+          <label>Phosphorus<input type="number" id="p" step="0.1" placeholder="kg/ha"><i>P</i></label>
+          <label>Potassium<input type="number" id="k" step="1" placeholder="kg/ha"><i>K</i></label>
+          <label>Organic carbon<input type="number" id="oc" step="0.01" placeholder="%"><i>OC</i></label>
+        </div>
+      </details>
+
+      <button class="run" type="submit">
+        <span>Run the engine</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <!-- ─────────────────────────── results ─────────────────────────── -->
+  <section class="results" id="results" hidden>
+    <div class="context-strip" id="context"></div>
+
+    <div class="shortlist-head">
+      <p class="eyebrow">Ranked shortlist</p>
+      <p class="shortlist-note" id="shortlist-note"></p>
+    </div>
+    <div class="arc" id="arc"></div>
+
+    <div class="detail" id="detail"></div>
+
+    <div class="rejected" id="rejected"></div>
+  </section>
+
+  <div class="empty" id="empty">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 8 C20 22, 14 30, 14 40 a18 18 0 0 0 36 0 C50 30, 44 22, 32 8 Z"/>
+      <path class="vein" d="M32 18 V52 M32 30 L22 24 M32 30 L42 24 M32 40 L21 33 M32 40 L43 33"/>
+    </svg>
+    <p>Choose a taluka to begin.</p>
+  </div>
+
+  <div class="loading" id="loading" hidden>
+    <div class="staves" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <p id="loading-text">Scoring 28 crops against this land…</p>
+  </div>
+
+</main>
+
+<footer>
+  <span>Ranker clears the popularity baseline by +0.11 NDCG@5 · yield ρ 0.50 warm start · fertiliser doses are exact table lookups</span>
+</footer>
+
+<script src="/static/crops.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

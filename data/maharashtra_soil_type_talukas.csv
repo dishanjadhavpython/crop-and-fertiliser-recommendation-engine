@@ -1,0 +1,359 @@
+﻿State,District,Taluka,Soil_Type,Soil_Type_Share_pct,Soil_Type_Secondary,Soil_Order,Soil_Taxonomy,Soil_Texture,Soil_Depth,Soil_Drainage,Soil_pH_Class,Soil_Parent_Material,Soil_Points_Sampled,Latitude,Longitude
+MAHARASHTRA,AHILYANAGAR,Akole,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,19.538887,73.997878
+MAHARASHTRA,AHILYANAGAR,Jamkhed,Black (Regur),55.6,Red & Yellow,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,18.668751,75.352388
+MAHARASHTRA,AHILYANAGAR,Karjat,Black (Regur),88.9,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.57983,75.001532
+MAHARASHTRA,AHILYANAGAR,Kopargaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.889465,74.45866
+MAHARASHTRA,AHILYANAGAR,Nagar,Black (Regur),88.9,Saline / Alkaline,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,19.043621,74.742676
+MAHARASHTRA,AHILYANAGAR,Nevasa,Saline / Alkaline,55.6,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.466736,74.963516
+MAHARASHTRA,AHILYANAGAR,Parner,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,18.922445,74.503005
+MAHARASHTRA,AHILYANAGAR,Pathardi,Mountain / Forest,88.9,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,19.17172,75.174557
+MAHARASHTRA,AHILYANAGAR,Rahta,Black (Regur),66.7,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.667344,74.507149
+MAHARASHTRA,AHILYANAGAR,Rahuri,Saline / Alkaline,77.8,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.396436,74.647148
+MAHARASHTRA,AHILYANAGAR,Sangamner,Black (Regur),66.7,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.56033,74.207041
+MAHARASHTRA,AHILYANAGAR,Shevgaon,Black (Regur),55.6,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.279166,74.902535
+MAHARASHTRA,AHILYANAGAR,Shrigonda,Black (Regur),55.6,Mountain / Forest,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,18.676384,74.670934
+MAHARASHTRA,AHILYANAGAR,Shrirampur,Black (Regur),66.7,Saline / Alkaline,Vertisols,Chromic Haplusterts,Loamy,Very deep,Moderately well drained,Neutral,Alluvium,9,19.641971,74.700709
+MAHARASHTRA,AKOLA,Akola,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.71166,77.002632
+MAHARASHTRA,AKOLA,Akot,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.047461,77.055276
+MAHARASHTRA,AKOLA,Balapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.732696,76.836328
+MAHARASHTRA,AKOLA,Barshitakli,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.522587,77.15796
+MAHARASHTRA,AKOLA,Murtijapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.723495,77.42577
+MAHARASHTRA,AKOLA,Patur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.422946,76.863247
+MAHARASHTRA,AKOLA,Telhara,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.037752,76.867132
+MAHARASHTRA,AMRAVATI,Achalpur,Black (Regur),77.8,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.240793,77.427797
+MAHARASHTRA,AMRAVATI,Amravati,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,21.153214,79.005342
+MAHARASHTRA,AMRAVATI,Anjangaon Surji,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.121372,77.300304
+MAHARASHTRA,AMRAVATI,Bhatkuli,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.986805,77.59057
+MAHARASHTRA,AMRAVATI,Chandur Railway,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.764872,77.973035
+MAHARASHTRA,AMRAVATI,Chandurbazar,Black (Regur),77.8,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.26519,77.703069
+MAHARASHTRA,AMRAVATI,Chikhaldara,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Very shallow,Somewhat excessively drained,Neutral,Basalt,9,21.476398,77.275779
+MAHARASHTRA,AMRAVATI,Daryapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.964455,77.333986
+MAHARASHTRA,AMRAVATI,Dhamangaon Railway,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.793374,78.177999
+MAHARASHTRA,AMRAVATI,Dharni,Black (Regur),83.3,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,6,21.562379,76.890479
+MAHARASHTRA,AMRAVATI,Morshi,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,21.279869,77.944751
+MAHARASHTRA,AMRAVATI,Nandgaon-Khandeshwar,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.696614,77.763455
+MAHARASHTRA,AMRAVATI,Tiosa,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.087066,78.065475
+MAHARASHTRA,AMRAVATI,Warud,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,21.471406,78.28288
+MAHARASHTRA,BEED,Ambejogai,Red & Yellow,44.4,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,18.704861,76.420276
+MAHARASHTRA,BEED,Ashti,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,18.887488,75.065502
+MAHARASHTRA,BEED,Beed,Saline / Alkaline,55.6,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.990406,75.754229
+MAHARASHTRA,BEED,Dharur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.882666,76.136628
+MAHARASHTRA,BEED,Georai,Black (Regur),44.4,Other,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.26214,75.739602
+MAHARASHTRA,BEED,Kaij,Red & Yellow,66.7,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,18.723101,76.037903
+MAHARASHTRA,BEED,Majalgaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,4,19.155131,76.209919
+MAHARASHTRA,BEED,Parli,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.848563,76.529712
+MAHARASHTRA,BEED,Patoda,Black (Regur),88.9,Red & Yellow,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,18.838836,75.463506
+MAHARASHTRA,BEED,Shirur (Kasar),Black (Regur),77.8,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.06662,75.427001
+MAHARASHTRA,BEED,Wadwani,Black (Regur),66.7,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.001933,76.089041
+MAHARASHTRA,BHANDARA,Bhandara,Black (Regur),88.9,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Strongly acidic,Alluvium,9,21.115947,79.658175
+MAHARASHTRA,BHANDARA,Lakhandur,Alluvial,55.6,Black (Regur),Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.794577,79.851407
+MAHARASHTRA,BHANDARA,Lakhani,Alluvial,66.7,Black (Regur),Inceptisols,Typic Haplustepts,Loamy,Very deep,Well drained,Slightly acidic,Alluvium,9,21.031093,79.847903
+MAHARASHTRA,BHANDARA,Mohadi,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.315954,79.637171
+MAHARASHTRA,BHANDARA,Pauni,Alluvial,55.6,Black (Regur),Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.792637,79.635963
+MAHARASHTRA,BHANDARA,Sakoli,Black (Regur),66.7,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.072671,79.995551
+MAHARASHTRA,BHANDARA,Tumsar,Alluvial,55.6,Black (Regur),Inceptisols,Typic Haplustepts,,Very deep,Well drained,Slightly acidic,Alluvium,9,21.444092,79.665841
+MAHARASHTRA,BULDHANA,Buldana,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.454849,76.095554
+MAHARASHTRA,BULDHANA,Chikhli,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.343893,76.322873
+MAHARASHTRA,BULDHANA,Deolgaon Raja,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.008789,76.026868
+MAHARASHTRA,BULDHANA,Jalgaon (Jamod),Black (Regur),62.5,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,8,21.059657,76.495452
+MAHARASHTRA,BULDHANA,Khamgaon,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.650224,76.559187
+MAHARASHTRA,BULDHANA,Lonar,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.983092,76.491145
+MAHARASHTRA,BULDHANA,Malkapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.891958,76.204035
+MAHARASHTRA,BULDHANA,Mehkar,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.254699,76.633266
+MAHARASHTRA,BULDHANA,Motala,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.685017,76.15288
+MAHARASHTRA,BULDHANA,Nandura,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.838569,76.460307
+MAHARASHTRA,BULDHANA,Sangrampur,Black (Regur),55.6,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.097518,76.707659
+MAHARASHTRA,BULDHANA,Shegaon,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.800751,76.690526
+MAHARASHTRA,BULDHANA,Sindkhed Raja,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.056607,76.389032
+MAHARASHTRA,CHANDRAPUR,Ballarpur,Saline / Alkaline,77.8,Red & Yellow,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,19.839847,79.431727
+MAHARASHTRA,CHANDRAPUR,Bhadravati,Black (Regur),66.7,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.16739,79.230194
+MAHARASHTRA,CHANDRAPUR,Brahmapuri,Alluvial,77.8,Black (Regur),Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.518539,79.86597
+MAHARASHTRA,CHANDRAPUR,Chandrapur,Saline / Alkaline,100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,20.029504,79.356665
+MAHARASHTRA,CHANDRAPUR,Chimur,Black (Regur),88.9,Saline / Alkaline,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.514228,79.364221
+MAHARASHTRA,CHANDRAPUR,Gondpipri,Saline / Alkaline,55.6,Alluvial,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,19.690938,79.636165
+MAHARASHTRA,CHANDRAPUR,Jiwati,Red & Yellow,100.0,,Alfisols,Rhodic Paleustalfs,Clayey,Deep,Well drained,Others,,8,19.586049,79.112303
+MAHARASHTRA,CHANDRAPUR,Korpana,Red & Yellow,55.6,Black (Regur),Alfisols,Kandic Paleustalfs,Clayey-skeletal,Deep,Excessively drained,Others,,9,19.781126,79.078826
+MAHARASHTRA,CHANDRAPUR,Mul,Black (Regur),77.8,Alluvial,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.054641,79.693917
+MAHARASHTRA,CHANDRAPUR,Nagbhid,Alluvial,66.7,Saline / Alkaline,Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Alluvium,9,20.581786,79.685306
+MAHARASHTRA,CHANDRAPUR,Pombhurna,Black (Regur),55.6,Alluvial,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,19.866337,79.690683
+MAHARASHTRA,CHANDRAPUR,Rajura,Black (Regur),77.8,Red & Yellow,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,19.697466,79.295186
+MAHARASHTRA,CHANDRAPUR,Sawali,Alluvial,77.8,Black (Regur),Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.146307,79.824039
+MAHARASHTRA,CHANDRAPUR,Sindewahi,Black (Regur),66.7,Alluvial,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.29416,79.625339
+MAHARASHTRA,CHANDRAPUR,Warora,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.324558,79.006851
+MAHARASHTRA,Chhatrapati Sambhajinagar,Aurangabad,Black (Regur),66.7,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.877263,75.339024
+MAHARASHTRA,Chhatrapati Sambhajinagar,Gangapur,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.795406,75.066658
+MAHARASHTRA,Chhatrapati Sambhajinagar,Kannad,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,20.245473,75.143786
+MAHARASHTRA,Chhatrapati Sambhajinagar,Khuldabad,Black (Regur),88.9,Alluvial,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,20.090158,75.215838
+MAHARASHTRA,Chhatrapati Sambhajinagar,Paithan,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.583556,75.430264
+MAHARASHTRA,Chhatrapati Sambhajinagar,Phulambri,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.130462,75.49091
+MAHARASHTRA,Chhatrapati Sambhajinagar,Sillod,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,20.354928,75.610469
+MAHARASHTRA,Chhatrapati Sambhajinagar,Soegaon,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,20.548704,75.316982
+MAHARASHTRA,Chhatrapati Sambhajinagar,Vaijapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.948905,74.833248
+MAHARASHTRA,DHARASHIV,Bhum,Red & Yellow,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,18.549309,75.619066
+MAHARASHTRA,DHARASHIV,Dharashiv,Red & Yellow,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,18.185357,76.042025
+MAHARASHTRA,DHARASHIV,Kalamb,Red & Yellow,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,18.573047,76.022492
+MAHARASHTRA,DHARASHIV,Lohara,Red & Yellow,66.7,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,17.99257,76.327016
+MAHARASHTRA,DHARASHIV,Omarga,Black (Regur),50.0,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Others,,8,17.836543,76.625005
+MAHARASHTRA,DHARASHIV,Paranda,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.268348,75.450754
+MAHARASHTRA,DHARASHIV,Tuljapur,Red & Yellow,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,18.008662,76.070792
+MAHARASHTRA,DHARASHIV,Washi,Red & Yellow,88.9,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,18.534991,75.803015
+MAHARASHTRA,DHULE,Dhule,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.878922,74.703143
+MAHARASHTRA,DHULE,Sakri,Black (Regur),100.0,,Inceptisols,Typic Haplustepts,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,21.032306,74.245739
+MAHARASHTRA,DHULE,Shirpur,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Slightly alkaline,Alluvium,9,21.411028,74.94059
+MAHARASHTRA,DHULE,Sindkhede,Saline / Alkaline,55.6,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,21.244362,74.723972
+MAHARASHTRA,GADCHIROLI,Aheri,Red & Yellow,88.9,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,19.302996,80.164739
+MAHARASHTRA,GADCHIROLI,Armori,Alluvial,100.0,,Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.43024,80.109217
+MAHARASHTRA,GADCHIROLI,Bhamragad,Red & Yellow,55.6,Alluvial,Alfisols,Udic Haplustalfs,Loamy,Deep,Well drained,Others,,9,19.425214,80.598386
+MAHARASHTRA,GADCHIROLI,Chamorshi,Black (Regur),55.6,Alluvial,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,19.788269,79.968611
+MAHARASHTRA,GADCHIROLI,Desaiganj (Vadasa),Saline / Alkaline,66.7,Alluvial,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,20.621296,79.965533
+MAHARASHTRA,GADCHIROLI,Dhanora,Alluvial,100.0,,Inceptisols,Typic Haplustepts,Loamy,Very deep,Well drained,Slightly acidic,Alluvium,9,20.271022,80.309543
+MAHARASHTRA,GADCHIROLI,Etapalli,Black (Regur),33.3,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,19.722343,80.430612
+MAHARASHTRA,GADCHIROLI,Gadchiroli,Alluvial,88.9,Black (Regur),Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.123189,80.051485
+MAHARASHTRA,GADCHIROLI,Korchi,Alluvial,77.8,Black (Regur),Inceptisols,Typic Haplustepts,Loamy,Very deep,Well drained,Slightly acidic,Alluvium,9,20.628909,80.440323
+MAHARASHTRA,GADCHIROLI,Kurkheda,Alluvial,100.0,,Entisols,Typic Ustorthents,Loamy,Shallow,Well drained,Neutral,Alluvium,9,20.587801,80.250566
+MAHARASHTRA,GADCHIROLI,Mulchera,Red & Yellow,44.4,Alluvial,Entisols,Lithic Ustorthents,Loamy-skeletal,Shallow,Excessively drained,Others,,9,19.67304,80.002571
+MAHARASHTRA,GADCHIROLI,Sironcha,Saline / Alkaline,77.8,Alluvial,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,18.913895,80.126095
+MAHARASHTRA,GONDIA,Amgaon,Black (Regur),66.7,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Deep,Moderately well drained,Slightly acidic,Alluvium,9,21.125997,79.735791
+MAHARASHTRA,GONDIA,Arjuni Morgaon,Saline / Alkaline,55.6,Black (Regur),Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,20.82644,80.017792
+MAHARASHTRA,GONDIA,Deori,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,21.071226,77.67486
+MAHARASHTRA,GONDIA,Gondiya,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Neutral,Alluvium,9,21.145629,80.268387
+MAHARASHTRA,GONDIA,Goregaon,Black (Regur),50.0,Saline / Alkaline,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Moderately well drained,Neutral,Alluvium,8,19.164869,72.849549
+MAHARASHTRA,GONDIA,Sadak-Arjuni,Black (Regur),77.8,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.09318,80.154157
+MAHARASHTRA,GONDIA,Salekasa,Black (Regur),85.7,Alluvial,Vertisols,Chromic Haplusterts,Loamy,Very deep,Moderately well drained,Slightly acidic,Alluvium,7,21.306248,80.509787
+MAHARASHTRA,GONDIA,Tirora,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.414012,79.916611
+MAHARASHTRA,HINGOLI,Aundha (Nagnath),Saline / Alkaline,77.8,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,19.564522,77.066131
+MAHARASHTRA,HINGOLI,Hingoli,Saline / Alkaline,55.6,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,19.803512,77.17926
+MAHARASHTRA,HINGOLI,Kalamnuri,Black (Regur),55.6,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.572346,77.347495
+MAHARASHTRA,HINGOLI,Sengaon,Saline / Alkaline,77.8,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,19.820015,76.794247
+MAHARASHTRA,HINGOLI,Vasmath,Black (Regur),88.9,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.312161,77.106881
+MAHARASHTRA,JALGAON,Amalner,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,21.052781,75.049741
+MAHARASHTRA,JALGAON,Bhadgaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.660253,75.130494
+MAHARASHTRA,JALGAON,Bhusawal,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.994618,75.83963
+MAHARASHTRA,JALGAON,Bodvad,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.877502,75.981132
+MAHARASHTRA,JALGAON,Chalisgaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.502366,74.96557
+MAHARASHTRA,JALGAON,Chopda,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,Basalt,9,21.247186,75.298956
+MAHARASHTRA,JALGAON,Dharangaon,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Shallow,Well drained,Neutral,Basalt,9,21.006188,75.286334
+MAHARASHTRA,JALGAON,Erandol,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.867354,75.352015
+MAHARASHTRA,JALGAON,Jalgaon,Black (Regur),88.9,Other,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,Alluvium,9,21.01007,75.5696
+MAHARASHTRA,JALGAON,Jamner,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.732285,75.802434
+MAHARASHTRA,JALGAON,Muktainagar (Edlabad),Black (Regur),50.0,Alluvial,Vertisols,Chromic Haplusterts,Loamy,Very deep,Moderately well drained,Neutral,Alluvium,8,21.08603,76.065274
+MAHARASHTRA,JALGAON,Pachora,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,20.656258,75.401109
+MAHARASHTRA,JALGAON,Parola,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.831309,75.114918
+MAHARASHTRA,JALGAON,Raver,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,Alluvium,8,21.222231,76.044418
+MAHARASHTRA,JALGAON,Yawal,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,Basalt,9,21.226002,75.695082
+MAHARASHTRA,JALNA,Ambad,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.565409,75.775701
+MAHARASHTRA,JALNA,Badnapur,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.900357,75.74414
+MAHARASHTRA,JALNA,Bhokardan,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.292832,75.804016
+MAHARASHTRA,JALNA,Ghansawangi,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.492486,76.019629
+MAHARASHTRA,JALNA,Jafrabad,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.207044,76.004013
+MAHARASHTRA,JALNA,Jalna,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.831823,75.890934
+MAHARASHTRA,JALNA,Mantha,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.730231,76.334693
+MAHARASHTRA,JALNA,Partur,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.488276,76.260698
+MAHARASHTRA,KOLHAPUR,Ajra,Red & Yellow,77.8,Mountain / Forest,Alfisols,Typic Rhodustalfs,Clayey,Deep,Well drained,Slightly acidic,Basalt,9,16.157717,74.188142
+MAHARASHTRA,KOLHAPUR,Bhudargad,Mountain / Forest,66.7,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,,9,16.253901,74.112929
+MAHARASHTRA,KOLHAPUR,Chandgad,Red & Yellow,87.5,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,8,15.90143,74.240562
+MAHARASHTRA,KOLHAPUR,Gadhinglaj,Red & Yellow,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,Basalt,7,16.140901,74.403693
+MAHARASHTRA,KOLHAPUR,Gaganbawada,Mountain / Forest,88.9,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,16.548314,73.838974
+MAHARASHTRA,KOLHAPUR,Hatkanangle,Mountain / Forest,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,16.74451,74.375317
+MAHARASHTRA,KOLHAPUR,Kagal,Red & Yellow,57.1,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,7,16.575089,74.315257
+MAHARASHTRA,KOLHAPUR,Karvir,Black (Regur),77.8,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,16.660327,74.196004
+MAHARASHTRA,KOLHAPUR,Panhala,Mountain / Forest,44.4,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,16.806683,74.112598
+MAHARASHTRA,KOLHAPUR,Radhanagari,Mountain / Forest,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,16.361976,73.925118
+MAHARASHTRA,KOLHAPUR,Shahuwadi,Red & Yellow,55.6,Black (Regur),Alfisols,Kandic Paleustalfs,Clayey,Deep,Well drained,Others,,9,16.96172,73.893009
+MAHARASHTRA,KOLHAPUR,Shirol,Black (Regur),66.7,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Others,Alluvium,9,16.710397,74.581218
+MAHARASHTRA,LATUR,Ahmadpur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.706124,76.937731
+MAHARASHTRA,LATUR,Ausa,Alluvial,55.6,Black (Regur),Inceptisols,Typic Haplustepts,,Very deep,Well drained,Slightly acidic,Alluvium,9,18.251024,76.500958
+MAHARASHTRA,LATUR,Chakur,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Very deep,Well drained,Slightly alkaline,Basalt,9,18.517472,76.87662
+MAHARASHTRA,LATUR,Deoni,Red & Yellow,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,8,18.264444,77.082134
+MAHARASHTRA,LATUR,Jalkot,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,18.629061,77.178302
+MAHARASHTRA,LATUR,Latur,Alluvial,88.9,Red & Yellow,Inceptisols,Typic Haplustepts,,Very deep,Well drained,Slightly acidic,Alluvium,9,18.398227,76.562591
+MAHARASHTRA,LATUR,Nilanga,Red & Yellow,77.8,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,18.083767,76.799229
+MAHARASHTRA,LATUR,Renapur,Black (Regur),66.7,Alluvial,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,18.526431,76.596766
+MAHARASHTRA,LATUR,Shirur Anantpal,Black (Regur),55.6,Red & Yellow,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Slightly alkaline,Basalt,9,18.328598,76.818582
+MAHARASHTRA,LATUR,Udgir,Black (Regur),66.7,Red & Yellow,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,18.392135,77.119612
+MAHARASHTRA,MUMBAI SUBURBAN,Andheri,Saline / Alkaline,71.4,Black (Regur),Inceptisols,Vertic Halaquepts,Clayey,Moderately deep,Poorly drained,Slightly alkaline,Marine sediments,7,19.119698,72.84642
+MAHARASHTRA,MUMBAI SUBURBAN,Borivali,Black (Regur),44.4,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Moderately well drained,Neutral,Alluvium,9,19.229068,72.857363
+MAHARASHTRA,MUMBAI SUBURBAN,Kurla,Saline / Alkaline,87.5,Black (Regur),Inceptisols,Vertic Halaquepts,Clayey,Moderately deep,Poorly drained,Slightly alkaline,Marine sediments,8,19.06528,72.87938
+MAHARASHTRA,NAGPUR,Bhiwapur,Black (Regur),100.0,,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.746079,79.388275
+MAHARASHTRA,NAGPUR,Hingna,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,21.035671,79.026412
+MAHARASHTRA,NAGPUR,Kalameshwar,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.26542,78.878818
+MAHARASHTRA,NAGPUR,Kamptee,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Strongly acidic,Alluvium,9,21.151624,79.256693
+MAHARASHTRA,NAGPUR,Katol,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,21.177564,79.045795
+MAHARASHTRA,NAGPUR,Kuhi,Black (Regur),88.9,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.962381,79.504321
+MAHARASHTRA,NAGPUR,Mauda,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly acidic,Alluvium,9,21.230867,79.418248
+MAHARASHTRA,NAGPUR,Nagpur (Rural),Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,21.138207,78.810731
+MAHARASHTRA,NAGPUR,Nagpur (Urban),Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,21.141756,79.089338
+MAHARASHTRA,NAGPUR,Narkhed,Red & Yellow,50.0,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,6,21.471322,78.533717
+MAHARASHTRA,NAGPUR,Parseoni,Alluvial,55.6,Black (Regur),Inceptisols,Typic Haplustepts,,Very deep,Well drained,Slightly acidic,Alluvium,9,21.426502,79.135469
+MAHARASHTRA,NAGPUR,Ramtek,Saline / Alkaline,55.6,Alluvial,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,21.506417,79.349438
+MAHARASHTRA,NAGPUR,Savner,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Loamy,Very deep,Moderately well drained,Others,Alluvium,6,21.432048,78.887638
+MAHARASHTRA,NAGPUR,Umred,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Strongly acidic,Alluvium,9,21.125615,79.116186
+MAHARASHTRA,NANDED,Ardhapur,Black (Regur),66.7,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.269321,77.414996
+MAHARASHTRA,NANDED,Bhokar,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,19.194825,77.683399
+MAHARASHTRA,NANDED,Biloli,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,4,18.765284,77.696833
+MAHARASHTRA,NANDED,Deglur,Black (Regur),88.9,Red & Yellow,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,18.468042,77.499932
+MAHARASHTRA,NANDED,Dharmabad,Black (Regur),88.9,Red & Yellow,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.921679,77.762348
+MAHARASHTRA,NANDED,Hadgaon,Black (Regur),66.7,Saline / Alkaline,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly alkaline,Basalt,9,19.478617,77.606804
+MAHARASHTRA,NANDED,Himayatnagar,Black (Regur),44.4,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.41121,77.843793
+MAHARASHTRA,NANDED,Kandhar,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.842451,77.251067
+MAHARASHTRA,NANDED,Kinwat,Black (Regur),77.8,Red & Yellow,Vertisols,Entic Haplusterts,Clayey,Very deep,Well drained,Neutral,Alluvium,9,19.577469,78.244009
+MAHARASHTRA,NANDED,Loha,Black (Regur),55.6,Saline / Alkaline,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.936084,77.101549
+MAHARASHTRA,NANDED,Mahur,Black (Regur),88.9,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.847978,77.921763
+MAHARASHTRA,NANDED,Mudkhed,Black (Regur),88.9,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,19.13935,77.501393
+MAHARASHTRA,NANDED,Mukhed,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.575365,77.383925
+MAHARASHTRA,NANDED,Naigaon (Khairgaon),Black (Regur),55.6,Other,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.876687,77.511909
+MAHARASHTRA,NANDED,Nanded,Black (Regur),66.7,Alluvial,Vertisols,Entic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.422689,79.599823
+MAHARASHTRA,NANDED,Umri,Black (Regur),77.8,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.021713,77.589036
+MAHARASHTRA,NANDURBAR,Akkalkuwa,Black (Regur),77.8,Laterite,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,21.700568,74.00019
+MAHARASHTRA,NANDURBAR,Akrani,Laterite,77.8,Black (Regur),Alfisols,Typic Plinthustalfs,Loamy,Moderately deep,Well drained,Neutral,Basalt,9,21.849849,74.280995
+MAHARASHTRA,NANDURBAR,Nandurbar,Black (Regur),88.9,Other,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,21.365999,74.284004
+MAHARASHTRA,NANDURBAR,Nawapur,Black (Regur),75.0,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly alkaline,Basalt,8,21.210809,73.963263
+MAHARASHTRA,NANDURBAR,Shahade,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,Alluvium,9,18.497868,73.853756
+MAHARASHTRA,NANDURBAR,Talode,Black (Regur),50.0,Laterite,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,6,21.6203,74.231715
+MAHARASHTRA,NASHIK,Baglan,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.690229,74.128691
+MAHARASHTRA,NASHIK,Chandvad,Black (Regur),55.6,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.327815,74.238723
+MAHARASHTRA,NASHIK,Deola,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.448137,74.259295
+MAHARASHTRA,NASHIK,Dindori,Black (Regur),66.7,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.255363,73.807544
+MAHARASHTRA,NASHIK,Igatpuri,Mountain / Forest,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,19.694439,73.563888
+MAHARASHTRA,NASHIK,Kalwan,Black (Regur),55.6,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.529382,73.952168
+MAHARASHTRA,NASHIK,Malegaon,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.589687,74.571757
+MAHARASHTRA,NASHIK,Nandgaon,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,20.333552,74.670714
+MAHARASHTRA,NASHIK,Nashik,Black (Regur),77.8,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.259817,74.453432
+MAHARASHTRA,NASHIK,Niphad,Black (Regur),77.8,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.085019,74.10776
+MAHARASHTRA,NASHIK,Peth,Mountain / Forest,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,20.258973,73.511172
+MAHARASHTRA,NASHIK,Sinnar,Saline / Alkaline,44.4,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.80824,74.088281
+MAHARASHTRA,NASHIK,Surgana,Mountain / Forest,71.4,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,7,20.53877,73.637176
+MAHARASHTRA,NASHIK,Trimbakeshwar,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,19.93212,73.530755
+MAHARASHTRA,NASHIK,Yevla,Black (Regur),55.6,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.07918,74.519942
+MAHARASHTRA,PALGHAR,Dahanu,Black (Regur),88.9,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly alkaline,Basalt,9,19.980742,72.90255
+MAHARASHTRA,PALGHAR,Jawhar,Mountain / Forest,77.8,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,19.957606,73.192709
+MAHARASHTRA,PALGHAR,Mokhada,Mountain / Forest,66.7,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,19.873945,73.375261
+MAHARASHTRA,PALGHAR,Palghar,Mountain / Forest,57.1,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,7,20.124209,72.91723
+MAHARASHTRA,PALGHAR,Talasari,Black (Regur),50.0,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Moderately well drained,Neutral,Alluvium,4,20.148207,72.895048
+MAHARASHTRA,PALGHAR,Vasai,Saline / Alkaline,42.9,Black (Regur),Inceptisols,Vertic Halaquepts,Clayey,Moderately deep,Poorly drained,Slightly alkaline,Marine sediments,7,19.342824,72.805441
+MAHARASHTRA,PALGHAR,Vikramgad,Mountain / Forest,88.9,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,19.814161,73.078463
+MAHARASHTRA,PALGHAR,Wada,Mountain / Forest,100.0,,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,19.654672,73.148045
+MAHARASHTRA,PARBHANI,Gangakhed,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.9131,76.755707
+MAHARASHTRA,PARBHANI,Jintur,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.610944,76.743826
+MAHARASHTRA,PARBHANI,Manwath,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.243584,76.559161
+MAHARASHTRA,PARBHANI,Palam,Black (Regur),77.8,Other,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.010143,76.951685
+MAHARASHTRA,PARBHANI,Parbhani,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.24471,76.776084
+MAHARASHTRA,PARBHANI,Pathri,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.219461,76.428416
+MAHARASHTRA,PARBHANI,Purna,Black (Regur),88.9,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.181044,76.994033
+MAHARASHTRA,PARBHANI,Selu,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.454861,76.438805
+MAHARASHTRA,PARBHANI,Sonpeth,Black (Regur),55.6,Other,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.980006,76.572859
+MAHARASHTRA,PUNE,Ambegaon,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.031694,73.95003
+MAHARASHTRA,PUNE,Baramati,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,18.219854,74.453405
+MAHARASHTRA,PUNE,Bhor,Red & Yellow,55.6,Mountain / Forest,Alfisols,Typic Rhodustalfs,Clayey,Deep,Well drained,Others,Basalt,9,18.212761,73.816366
+MAHARASHTRA,PUNE,Daund,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.483435,74.362169
+MAHARASHTRA,PUNE,Haveli,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Slightly alkaline,Alluvium,9,18.51052,74.060935
+MAHARASHTRA,PUNE,Indapur,Black (Regur),44.4,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.11253,74.923865
+MAHARASHTRA,PUNE,Junnar,Black (Regur),55.6,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.206254,73.870238
+MAHARASHTRA,PUNE,Khed,Black (Regur),77.8,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.850107,73.838033
+MAHARASHTRA,PUNE,Mawal,Mountain / Forest,88.9,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,18.743357,73.426396
+MAHARASHTRA,PUNE,Mulshi,Black (Regur),66.7,Mountain / Forest,Inceptisols,Vertic Haplustepts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,18.523066,73.615976
+MAHARASHTRA,PUNE,Pune City,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Slightly alkaline,Alluvium,9,18.521374,73.854507
+MAHARASHTRA,PUNE,Purandhar,Black (Regur),77.8,Mountain / Forest,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.273287,74.090167
+MAHARASHTRA,PUNE,Shirur,Black (Regur),77.8,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.761099,74.209529
+MAHARASHTRA,PUNE,Velhe,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,18.303603,73.582464
+MAHARASHTRA,RAIGAD,Alibag,Mountain / Forest,88.9,Saline / Alkaline,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,18.657188,72.952011
+MAHARASHTRA,RAIGAD,Karjat,Red & Yellow,55.6,Mountain / Forest,Inceptisols,Typic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,18.961778,73.377504
+MAHARASHTRA,RAIGAD,Khalapur,Mountain / Forest,88.9,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,18.846785,73.274861
+MAHARASHTRA,RAIGAD,Mahad,Red & Yellow,55.6,Mountain / Forest,Inceptisols,Typic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,18.099824,73.46087
+MAHARASHTRA,RAIGAD,Mangaon,Red & Yellow,66.7,Mountain / Forest,Inceptisols,Typic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,18.297614,73.292514
+MAHARASHTRA,RAIGAD,Mhasla,Mountain / Forest,55.6,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,18.113999,73.159248
+MAHARASHTRA,RAIGAD,Murud,Mountain / Forest,100.0,,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,7,18.404684,72.953382
+MAHARASHTRA,RAIGAD,Panvel,Mountain / Forest,66.7,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,18.925086,73.325246
+MAHARASHTRA,RAIGAD,Pen,Mountain / Forest,88.9,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,18.697366,73.13672
+MAHARASHTRA,RAIGAD,Poladpur,Mountain / Forest,88.9,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,17.968762,73.535374
+MAHARASHTRA,RAIGAD,Roha,Mountain / Forest,100.0,,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,18.446861,73.138688
+MAHARASHTRA,RAIGAD,Shrivardhan,Red & Yellow,50.0,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,,6,18.132601,73.016435
+MAHARASHTRA,RAIGAD,Sudhagad,Mountain / Forest,88.9,Other,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,18.581091,73.259139
+MAHARASHTRA,RAIGAD,Tala,Red & Yellow,77.8,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,,9,18.28812,73.11831
+MAHARASHTRA,RAIGAD,Uran,Saline / Alkaline,33.3,Other,Inceptisols,Vertic Halaquepts,Clayey,Moderately deep,Poorly drained,Slightly alkaline,Marine sediments,6,18.8808,72.9386
+MAHARASHTRA,RATNAGIRI,Chiplun,Red & Yellow,77.8,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly acidic,Colluvium,9,17.427356,73.529841
+MAHARASHTRA,RATNAGIRI,Dapoli,Red & Yellow,100.0,,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly acidic,Colluvium,9,17.756984,73.214243
+MAHARASHTRA,RATNAGIRI,Guhagar,Red & Yellow,62.5,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly acidic,Colluvium,8,17.406334,73.263312
+MAHARASHTRA,RATNAGIRI,Khed,Red & Yellow,44.4,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,,9,17.733492,73.436431
+MAHARASHTRA,RATNAGIRI,Lanja,Mountain / Forest,66.7,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,,9,16.854122,73.581747
+MAHARASHTRA,RATNAGIRI,Mandangad,Black (Regur),55.6,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,17.97636,73.190635
+MAHARASHTRA,RATNAGIRI,Rajapur,Red & Yellow,55.6,Black (Regur),Alfisols,Typic Rhodustalfs,Clayey,Deep,Well drained,Slightly acidic,Basalt,9,16.63869,73.546052
+MAHARASHTRA,RATNAGIRI,Ratnagiri,Red & Yellow,66.7,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,,9,17.029179,73.372991
+MAHARASHTRA,RATNAGIRI,Sangameshwar,Black (Regur),44.4,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,17.115466,73.605873
+MAHARASHTRA,SANGLI,Atpadi,Red & Yellow,66.7,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.422677,74.939122
+MAHARASHTRA,SANGLI,Jat,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,17.071862,75.333068
+MAHARASHTRA,SANGLI,Kadegaon,Red & Yellow,66.7,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.275969,74.375515
+MAHARASHTRA,SANGLI,Kavathemahankal,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,17.055574,74.891007
+MAHARASHTRA,SANGLI,Khanapur,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,17.291294,74.615202
+MAHARASHTRA,SANGLI,Miraj,Mountain / Forest,88.9,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,16.858516,74.710895
+MAHARASHTRA,SANGLI,Palus,Red & Yellow,77.8,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,17.044996,74.436583
+MAHARASHTRA,SANGLI,Shirala,Mountain / Forest,44.4,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,17.080133,74.026865
+MAHARASHTRA,SANGLI,Tasgaon,Black (Regur),33.3,Red & Yellow,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Moderately well drained,Slightly alkaline,Alluvium,9,17.090486,74.683267
+MAHARASHTRA,SANGLI,Walwa,Red & Yellow,44.4,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,17.019648,74.280633
+MAHARASHTRA,SATARA,Jaoli,Mountain / Forest,55.6,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,17.725756,73.698936
+MAHARASHTRA,SATARA,Karad,Red & Yellow,88.9,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.285213,74.182215
+MAHARASHTRA,SATARA,Khandala,Red & Yellow,44.4,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,18.058396,74.014819
+MAHARASHTRA,SATARA,Khatav,Red & Yellow,66.7,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.637049,74.401763
+MAHARASHTRA,SATARA,Koregaon,Red & Yellow,66.7,Alluvial,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.691995,74.149068
+MAHARASHTRA,SATARA,Mahabaleshwar,Mountain / Forest,77.8,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Moderately acidic,Basalt,9,17.924276,73.65758
+MAHARASHTRA,SATARA,Man,Red & Yellow,88.9,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,17.679558,74.652228
+MAHARASHTRA,SATARA,Patan,Red & Yellow,55.6,Black (Regur),Alfisols,Kandic Paleustalfs,Clayey,Deep,Well drained,Others,Basalt,9,17.356527,73.863421
+MAHARASHTRA,SATARA,Phaltan,Black (Regur),66.7,Mountain / Forest,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,17.957934,74.414235
+MAHARASHTRA,SATARA,Satara,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Deep,Well drained,Strongly acidic,Alluvium,9,21.151279,79.102679
+MAHARASHTRA,SATARA,Wai,Red & Yellow,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.942374,73.919253
+MAHARASHTRA,SINDHUDURG,Devgad,Red & Yellow,66.7,Saline / Alkaline,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Colluvium,9,16.382529,73.499955
+MAHARASHTRA,SINDHUDURG,Dodamarg,Mountain / Forest,62.5,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Moderately acidic,Basalt,8,15.737612,74.046453
+MAHARASHTRA,SINDHUDURG,Kankavli,Red & Yellow,66.7,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly acidic,Colluvium,9,16.374204,73.745172
+MAHARASHTRA,SINDHUDURG,Kudal,Red & Yellow,55.6,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly acidic,Colluvium,9,16.063527,73.839242
+MAHARASHTRA,SINDHUDURG,Malwan,Black (Regur),60.0,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,5,16.05942,73.46405
+MAHARASHTRA,SINDHUDURG,Sawantwadi,Mountain / Forest,77.8,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Moderately acidic,Basalt,9,15.890049,73.91337
+MAHARASHTRA,SINDHUDURG,Vaibhavvadi,Mountain / Forest,66.7,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,16.532223,73.767082
+MAHARASHTRA,SINDHUDURG,Vengurla,Red & Yellow,50.0,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Slightly acidic,,8,15.833953,73.693339
+MAHARASHTRA,SOLAPUR,Akkalkot,Red & Yellow,100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Others,,9,17.515193,76.212278
+MAHARASHTRA,SOLAPUR,Barshi,Black (Regur),88.9,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.234111,75.687511
+MAHARASHTRA,SOLAPUR,Karmala,Black (Regur),88.9,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.321381,75.116877
+MAHARASHTRA,SOLAPUR,Madha,Black (Regur),77.8,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,18.071309,75.362328
+MAHARASHTRA,SOLAPUR,Malshiras,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,17.809617,74.934706
+MAHARASHTRA,SOLAPUR,Mangalvedhe,Saline / Alkaline,44.4,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,17.402694,75.459373
+MAHARASHTRA,SOLAPUR,Mohol,Saline / Alkaline,77.8,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,17.770961,75.643505
+MAHARASHTRA,SOLAPUR,Pandharpur,Mountain / Forest,77.8,Saline / Alkaline,Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,17.725592,75.300194
+MAHARASHTRA,SOLAPUR,Sangole,Black (Regur),77.8,Mountain / Forest,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,17.436269,75.193229
+MAHARASHTRA,SOLAPUR,Solapur North,Mountain / Forest,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Excessively drained,Neutral,Basalt,9,17.776396,75.875359
+MAHARASHTRA,SOLAPUR,Solapur South,Red & Yellow,77.8,Black (Regur),Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,17.604716,76.034694
+MAHARASHTRA,THANE,Ambarnath,Red & Yellow,77.8,Mountain / Forest,Inceptisols,Typic Haplustepts,Clayey,Moderately deep,Well drained,Others,,9,19.190415,73.205998
+MAHARASHTRA,THANE,Bhiwandi,Black (Regur),33.3,Red & Yellow,Inceptisols,Typic Haplustepts,Loamy,Moderately deep,Well drained,Slightly alkaline,Basalt,9,19.302556,73.058807
+MAHARASHTRA,THANE,Kalyan,Red & Yellow,55.6,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Others,,9,19.239674,73.136648
+MAHARASHTRA,THANE,Murbad,Mountain / Forest,66.7,Red & Yellow,Entisols,Lithic Ustorthents,Loamy,Shallow,Somewhat excessively drained,Slightly acidic,Basalt,9,19.257118,73.390749
+MAHARASHTRA,THANE,Shahapur,Mountain / Forest,55.6,Saline / Alkaline,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Slightly acidic,Basalt,9,19.451794,73.326596
+MAHARASHTRA,THANE,Thane,Black (Regur),66.7,Mountain / Forest,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.128532,74.736329
+MAHARASHTRA,THANE,Ulhasnagar,Red & Yellow,66.7,Mountain / Forest,Inceptisols,Typic Haplustepts,Loamy,Shallow,Well drained,Others,,9,19.223633,73.167152
+MAHARASHTRA,WARDHA,Arvi,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.93615,78.289217
+MAHARASHTRA,WARDHA,Ashti,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,21.205658,78.18279
+MAHARASHTRA,WARDHA,Deoli,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.631117,78.397171
+MAHARASHTRA,WARDHA,Hinganghat,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.542611,78.833164
+MAHARASHTRA,WARDHA,Karanja,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,21.10443,78.43253
+MAHARASHTRA,WARDHA,Samudrapur,Black (Regur),88.9,Red & Yellow,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.613143,79.024011
+MAHARASHTRA,WARDHA,Seloo,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Shallow,Well drained,Neutral,Basalt,9,20.863564,78.705685
+MAHARASHTRA,WARDHA,Wardha,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,21.119348,79.072758
+MAHARASHTRA,WASHIM,Karanja,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.482071,77.489234
+MAHARASHTRA,WASHIM,Malegaon,Black (Regur),88.9,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.258503,76.976574
+MAHARASHTRA,WASHIM,Mangrulpir,Black (Regur),66.7,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.275865,77.326123
+MAHARASHTRA,WASHIM,Manora,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.224711,77.550226
+MAHARASHTRA,WASHIM,Risod,Saline / Alkaline,55.6,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,20.033758,76.834028
+MAHARASHTRA,WASHIM,Washim,Saline / Alkaline,88.9,Black (Regur),Vertisols,Chromic Haplusterts,Clayey,Deep,Imperfectly drained,Others,,9,20.102921,77.135387
+MAHARASHTRA,YAVATMAL,Arni,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.053858,77.994237
+MAHARASHTRA,YAVATMAL,Babulgaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.572762,78.14156
+MAHARASHTRA,YAVATMAL,Darwha,Black (Regur),66.7,Saline / Alkaline,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.324892,77.777941
+MAHARASHTRA,YAVATMAL,Digras,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.096833,77.762818
+MAHARASHTRA,YAVATMAL,Ghatanji,Black (Regur),100.0,,Inceptisols,Vertic Haplustepts,Clayey,Moderately deep,Well drained,Slightly alkaline,Alluvium,9,20.019381,78.274666
+MAHARASHTRA,YAVATMAL,Kalamb,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.371418,78.343262
+MAHARASHTRA,YAVATMAL,Kelapur,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.021117,78.533578
+MAHARASHTRA,YAVATMAL,Mahagaon,Black (Regur),55.6,Alluvial,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.83361,77.758275
+MAHARASHTRA,YAVATMAL,Maregaon,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,20.151766,78.794472
+MAHARASHTRA,YAVATMAL,Ner,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,20.490596,77.811853
+MAHARASHTRA,YAVATMAL,Pusad,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,19.88582,77.484612
+MAHARASHTRA,YAVATMAL,Ralegaon,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Well drained,Slightly alkaline,Alluvium,9,20.327766,78.603686
+MAHARASHTRA,YAVATMAL,Umarkhed,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Loamy,Shallow,Well drained,Neutral,Basalt,9,19.598217,77.914099
+MAHARASHTRA,YAVATMAL,Wani,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Slightly alkaline,Alluvium,9,20.127778,78.996938
+MAHARASHTRA,YAVATMAL,Yavatmal,Black (Regur),100.0,,Entisols,Lithic Ustorthents,Clayey,Shallow,Well drained,Neutral,Basalt,9,20.390344,78.132852
+MAHARASHTRA,YAVATMAL,Zari-Jamani,Black (Regur),100.0,,Vertisols,Chromic Haplusterts,Clayey,Very deep,Moderately well drained,Neutral,Alluvium,9,19.884054,78.70342

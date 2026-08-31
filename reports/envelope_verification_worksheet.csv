@@ -1,0 +1,131 @@
+crop,species,factor,abs_min,opt_min,opt_max,abs_max,source,verified
+Banana,Musa acuminata,rainfall_mm,600.0,1100,2700,4000,FAO EcoCrop; ICAR-NRCB Tiruchirappalli PoP,False
+Banana,Musa acuminata,temperature_C,15.0,24,33,40,FAO EcoCrop; ICAR-NRCB Tiruchirappalli PoP,False
+Banana,Musa acuminata,pH,5.0,6.0,7.5,8.2,FAO EcoCrop; ICAR-NRCB Tiruchirappalli PoP,False
+Banana,Musa acuminata,drainage_ord,2.0,3.5,5.5,6.5,FAO EcoCrop; ICAR-NRCB Tiruchirappalli PoP,False
+Banana,Musa acuminata,min_depth_mm,750.0,,,,FAO EcoCrop; ICAR-NRCB Tiruchirappalli PoP,False
+Chickpea,Cicer arietinum,rainfall_mm,120.0,250,750,1600,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Chickpea,Cicer arietinum,temperature_C,8.0,18,27,35,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Chickpea,Cicer arietinum,pH,5.5,6.0,8.2,9.0,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Chickpea,Cicer arietinum,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Chickpea,Cicer arietinum,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Chilli,Capsicum annuum,rainfall_mm,250.0,500,1300,2500,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Chilli,Capsicum annuum,temperature_C,15.0,20,32,38,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Chilli,Capsicum annuum,pH,5.5,6.0,7.5,8.3,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Chilli,Capsicum annuum,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Chilli,Capsicum annuum,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Finger Millet,Eleusine coracana,rainfall_mm,250.0,500,1300,3000,FAO EcoCrop; ICAR-IIMR PoP,False
+Finger Millet,Eleusine coracana,temperature_C,12.0,20,30,36,FAO EcoCrop; ICAR-IIMR PoP,False
+Finger Millet,Eleusine coracana,pH,4.5,5.0,8.2,8.8,FAO EcoCrop; ICAR-IIMR PoP,False
+Finger Millet,Eleusine coracana,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIMR PoP,False
+Finger Millet,Eleusine coracana,min_depth_mm,250.0,,,,FAO EcoCrop; ICAR-IIMR PoP,False
+Grapes,Vitis vinifera,rainfall_mm,150.0,350,1000,2500,FAO EcoCrop; ICAR-NRCG Pune PoP,False
+Grapes,Vitis vinifera,temperature_C,10.0,20,33,42,FAO EcoCrop; ICAR-NRCG Pune PoP,False
+Grapes,Vitis vinifera,pH,5.5,6.5,8.2,9.0,FAO EcoCrop; ICAR-NRCG Pune PoP,False
+Grapes,Vitis vinifera,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-NRCG Pune PoP,False
+Grapes,Vitis vinifera,min_depth_mm,750.0,,,,FAO EcoCrop; ICAR-NRCG Pune PoP,False
+Groundnut,Arachis hypogaea,rainfall_mm,250.0,450,1200,2500,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Groundnut,Arachis hypogaea,temperature_C,15.0,24,33,40,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Groundnut,Arachis hypogaea,pH,5.0,6.0,7.5,8.2,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Groundnut,Arachis hypogaea,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Groundnut,Arachis hypogaea,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Linseed,Linum usitatissimum,rainfall_mm,120.0,250,750,1500,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
+Linseed,Linum usitatissimum,temperature_C,8.0,15,26,33,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
+Linseed,Linum usitatissimum,pH,5.0,6.0,7.5,8.3,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
+Linseed,Linum usitatissimum,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
+Linseed,Linum usitatissimum,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
+Maize,Zea mays,rainfall_mm,300.0,500,1300,5000,FAO EcoCrop; ICAR-IIMR Ludhiana PoP,False
+Maize,Zea mays,temperature_C,12.0,20,30,38,FAO EcoCrop; ICAR-IIMR Ludhiana PoP,False
+Maize,Zea mays,pH,5.0,5.8,7.5,8.3,FAO EcoCrop; ICAR-IIMR Ludhiana PoP,False
+Maize,Zea mays,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIMR Ludhiana PoP,False
+Maize,Zea mays,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IIMR Ludhiana PoP,False
+Mungbean,Vigna radiata,rainfall_mm,150.0,300,800,1600,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Mungbean,Vigna radiata,temperature_C,18.0,25,33,41,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Mungbean,Vigna radiata,pH,5.5,6.2,7.5,8.5,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Mungbean,Vigna radiata,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Mungbean,Vigna radiata,min_depth_mm,300.0,,,,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Onion,Allium cepa,rainfall_mm,150.0,350,1000,2000,FAO EcoCrop; ICAR-DOGR Rajgurunagar PoP,False
+Onion,Allium cepa,temperature_C,8.0,15,28,35,FAO EcoCrop; ICAR-DOGR Rajgurunagar PoP,False
+Onion,Allium cepa,pH,5.5,6.0,7.5,8.3,FAO EcoCrop; ICAR-DOGR Rajgurunagar PoP,False
+Onion,Allium cepa,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-DOGR Rajgurunagar PoP,False
+Onion,Allium cepa,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR-DOGR Rajgurunagar PoP,False
+Pearl Millet,Pennisetum glaucum,rainfall_mm,120.0,300,800,2000,FAO EcoCrop; ICRISAT agro-ecology,False
+Pearl Millet,Pennisetum glaucum,temperature_C,16.0,25,35,43,FAO EcoCrop; ICRISAT agro-ecology,False
+Pearl Millet,Pennisetum glaucum,pH,5.0,5.5,8.5,9.2,FAO EcoCrop; ICRISAT agro-ecology,False
+Pearl Millet,Pennisetum glaucum,drainage_ord,2.0,3.5,6.0,6.5,FAO EcoCrop; ICRISAT agro-ecology,False
+Pearl Millet,Pennisetum glaucum,min_depth_mm,200.0,,,,FAO EcoCrop; ICRISAT agro-ecology,False
+Pigeon Pea,Cajanus cajan,rainfall_mm,250.0,500,1400,3000,FAO EcoCrop; ICRISAT; ICAR-IIPR,False
+Pigeon Pea,Cajanus cajan,temperature_C,15.0,20,32,40,FAO EcoCrop; ICRISAT; ICAR-IIPR,False
+Pigeon Pea,Cajanus cajan,pH,5.0,5.5,7.8,8.5,FAO EcoCrop; ICRISAT; ICAR-IIPR,False
+Pigeon Pea,Cajanus cajan,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICRISAT; ICAR-IIPR,False
+Pigeon Pea,Cajanus cajan,min_depth_mm,600.0,,,,FAO EcoCrop; ICRISAT; ICAR-IIPR,False
+Pomegranate,Punica granatum,rainfall_mm,120.0,250,900,2000,FAO EcoCrop; ICAR-NRCP Solapur PoP,False
+Pomegranate,Punica granatum,temperature_C,10.0,22,36,45,FAO EcoCrop; ICAR-NRCP Solapur PoP,False
+Pomegranate,Punica granatum,pH,5.5,6.5,8.5,9.2,FAO EcoCrop; ICAR-NRCP Solapur PoP,False
+Pomegranate,Punica granatum,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-NRCP Solapur PoP,False
+Pomegranate,Punica granatum,min_depth_mm,600.0,,,,FAO EcoCrop; ICAR-NRCP Solapur PoP,False
+Potato,Solanum tuberosum,rainfall_mm,150.0,350,900,1800,FAO EcoCrop; ICAR-CPRI Shimla PoP,False
+Potato,Solanum tuberosum,temperature_C,7.0,15,24,30,FAO EcoCrop; ICAR-CPRI Shimla PoP,False
+Potato,Solanum tuberosum,pH,4.5,5.0,6.8,7.8,FAO EcoCrop; ICAR-CPRI Shimla PoP,False
+Potato,Solanum tuberosum,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-CPRI Shimla PoP,False
+Potato,Solanum tuberosum,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR-CPRI Shimla PoP,False
+Rice,Oryza sativa,rainfall_mm,400.0,900,2200,7000,FAO EcoCrop; ICAR-IIRR Hyderabad PoP,False
+Rice,Oryza sativa,temperature_C,15.0,22,32,40,FAO EcoCrop; ICAR-IIRR Hyderabad PoP,False
+Rice,Oryza sativa,pH,4.5,5.5,7.0,8.5,FAO EcoCrop; ICAR-IIRR Hyderabad PoP,False
+Rice,Oryza sativa,drainage_ord,0.5,1,3.5,5.0,FAO EcoCrop; ICAR-IIRR Hyderabad PoP,False
+Rice,Oryza sativa,min_depth_mm,300.0,,,,FAO EcoCrop; ICAR-IIRR Hyderabad PoP,False
+Safflower,Carthamus tinctorius,rainfall_mm,120.0,220,650,1400,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Safflower,Carthamus tinctorius,temperature_C,10.0,18,28,36,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Safflower,Carthamus tinctorius,pH,5.5,6.5,8.5,9.2,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Safflower,Carthamus tinctorius,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Safflower,Carthamus tinctorius,min_depth_mm,600.0,,,,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sesame,Sesamum indicum,rainfall_mm,150.0,350,850,1600,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sesame,Sesamum indicum,temperature_C,18.0,25,33,40,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sesame,Sesamum indicum,pH,5.5,6.0,8.0,8.7,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sesame,Sesamum indicum,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sesame,Sesamum indicum,min_depth_mm,300.0,,,,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sorghum,Sorghum bicolor,rainfall_mm,200.0,400,1000,4000,FAO EcoCrop; ICAR-IIMR Hyderabad PoP,False
+Sorghum,Sorghum bicolor,temperature_C,14.0,24,33,42,FAO EcoCrop; ICAR-IIMR Hyderabad PoP,False
+Sorghum,Sorghum bicolor,pH,5.0,5.5,8.2,9.0,FAO EcoCrop; ICAR-IIMR Hyderabad PoP,False
+Sorghum,Sorghum bicolor,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIMR Hyderabad PoP,False
+Sorghum,Sorghum bicolor,min_depth_mm,300.0,,,,FAO EcoCrop; ICAR-IIMR Hyderabad PoP,False
+Soybean,Glycine max,rainfall_mm,300.0,500,1300,2500,FAO EcoCrop; ICAR-IISR Indore PoP,False
+Soybean,Glycine max,temperature_C,14.0,20,32,38,FAO EcoCrop; ICAR-IISR Indore PoP,False
+Soybean,Glycine max,pH,5.0,6.0,7.5,8.3,FAO EcoCrop; ICAR-IISR Indore PoP,False
+Soybean,Glycine max,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IISR Indore PoP,False
+Soybean,Glycine max,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IISR Indore PoP,False
+Sugarcane,Saccharum officinarum,rainfall_mm,500.0,1000,2600,5000,FAO EcoCrop; Vasantdada Sugar Institute Pune,False
+Sugarcane,Saccharum officinarum,temperature_C,15.0,24,33,40,FAO EcoCrop; Vasantdada Sugar Institute Pune,False
+Sugarcane,Saccharum officinarum,pH,5.0,6.0,7.7,8.5,FAO EcoCrop; Vasantdada Sugar Institute Pune,False
+Sugarcane,Saccharum officinarum,drainage_ord,1.5,2.5,5.0,6.0,FAO EcoCrop; Vasantdada Sugar Institute Pune,False
+Sugarcane,Saccharum officinarum,min_depth_mm,900.0,,,,FAO EcoCrop; Vasantdada Sugar Institute Pune,False
+Sunflower,Helianthus annuus,rainfall_mm,150.0,350,900,2000,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sunflower,Helianthus annuus,temperature_C,12.0,20,30,38,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sunflower,Helianthus annuus,pH,5.5,6.2,8.0,8.8,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sunflower,Helianthus annuus,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Sunflower,Helianthus annuus,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IIOR Hyderabad PoP,False
+Tetraploid Cotton,Gossypium hirsutum,rainfall_mm,300.0,500,1300,2500,FAO EcoCrop; ICAR-CICR Nagpur PoP,False
+Tetraploid Cotton,Gossypium hirsutum,temperature_C,15.0,24,34,42,FAO EcoCrop; ICAR-CICR Nagpur PoP,False
+Tetraploid Cotton,Gossypium hirsutum,pH,5.5,6.0,8.2,9.0,FAO EcoCrop; ICAR-CICR Nagpur PoP,False
+Tetraploid Cotton,Gossypium hirsutum,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-CICR Nagpur PoP,False
+Tetraploid Cotton,Gossypium hirsutum,min_depth_mm,600.0,,,,FAO EcoCrop; ICAR-CICR Nagpur PoP,False
+Tomato,Solanum lycopersicum,rainfall_mm,200.0,400,1100,2200,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Tomato,Solanum lycopersicum,temperature_C,10.0,20,29,36,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Tomato,Solanum lycopersicum,pH,5.0,6.0,7.2,8.0,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Tomato,Solanum lycopersicum,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Tomato,Solanum lycopersicum,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR-IIHR Bengaluru PoP,False
+Turmeric,Curcuma longa,rainfall_mm,600.0,1000,2600,4000,FAO EcoCrop; ICAR-IISR Kozhikode PoP,False
+Turmeric,Curcuma longa,temperature_C,15.0,22,32,38,FAO EcoCrop; ICAR-IISR Kozhikode PoP,False
+Turmeric,Curcuma longa,pH,4.5,5.5,7.5,8.2,FAO EcoCrop; ICAR-IISR Kozhikode PoP,False
+Turmeric,Curcuma longa,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IISR Kozhikode PoP,False
+Turmeric,Curcuma longa,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IISR Kozhikode PoP,False
+Urdbean,Vigna mungo,rainfall_mm,200.0,350,900,1800,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Urdbean,Vigna mungo,temperature_C,18.0,25,33,40,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Urdbean,Vigna mungo,pH,5.5,6.0,7.8,8.5,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Urdbean,Vigna mungo,drainage_ord,1.5,2.5,5.5,6.5,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Urdbean,Vigna mungo,min_depth_mm,300.0,,,,FAO EcoCrop; ICAR-IIPR Kanpur PoP,False
+Wheat,Triticum aestivum,rainfall_mm,120.0,300,900,2000,FAO EcoCrop; ICAR-IIWBR Karnal PoP,False
+Wheat,Triticum aestivum,temperature_C,5.0,15,25,33,FAO EcoCrop; ICAR-IIWBR Karnal PoP,False
+Wheat,Triticum aestivum,pH,5.0,6.0,7.5,8.5,FAO EcoCrop; ICAR-IIWBR Karnal PoP,False
+Wheat,Triticum aestivum,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-IIWBR Karnal PoP,False
+Wheat,Triticum aestivum,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-IIWBR Karnal PoP,False

@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT_DIR"
+
+APP_MODULE="${APP_MODULE:-src.serve.api:app}"
+HOST="${HOST:-127.0.0.1}"
+PORT="${PORT:-8000}"
+VENV_DIR="${VENV_DIR:-$ROOT_DIR/.venv}"
+PYTHON_BIN="${PYTHON_BIN:-python3.13}"
+INSTALL_DEPS="${INSTALL_DEPS:-auto}"
+REBUILD_FEATURE_STORE="${REBUILD_FEATURE_STORE:-auto}"
+RELOAD="${RELOAD:-1}"
+
+log() {
+  printf '[run] %s\n' "$*"
+}
+
+python_cmd() {
+  if command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+    printf '%s\n' "$PYTHON_BIN"
+    return 0
+  fi
+
+  if command -v python3 >/dev/null 2>&1; then
+    printf '%s\n' "python3"
+    return 0
+  fi
+
+  printf 'Python 3 is required. Install Python 3.13 or set PYTHON_BIN=/path/to/python.\n' >&2
+  return 1
+}
+
+venv_python() {
+  local candidate
+  for candidate in \
+    "$VENV_DIR/bin/python" \
+    "$VENV_DIR/bin/python3" \
+    "$VENV_DIR/bin/python3.14" \
+    "$VENV_DIR/bin/python3.13"; do
+    if [[ -x "$candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+  return 1
+}
+
+if ! PY="$(venv_python)"; then
+  PY="$(python_cmd)"
+  if [[ -d "$VENV_DIR" ]]; then
+    log "recreating stale virtual environment at $VENV_DIR"
+    "$PY" -m venv --clear "$VENV_DIR"
+  else
+    log "creating virtual environment at $VENV_DIR"
+    "$PY" -m venv "$VENV_DIR"
+  fi
+  PY="$(venv_python)"
+fi
+
+PY_BASENAME="$(basename "$PY")"
+if [[ "$PY" == "$VENV_DIR/bin/"* && "$PY_BASENAME" != "python" ]]; then
+  if [[ ! -x "$VENV_DIR/bin/python" ]]; then
+    ln -sf "$PY_BASENAME" "$VENV_DIR/bin/python"
+  fi
+  if [[ ! -x "$VENV_DIR/bin/python3" ]]; then
+    ln -sf "$PY_BASENAME" "$VENV_DIR/bin/python3"
+  fi
+fi
+
+PIP=("$PY" -m pip)
+
+if [[ "$INSTALL_DEPS" == "1" || "$INSTALL_DEPS" == "true" ]]; then
+  log "installing dependencies from requirements.txt"
+  "${PIP[@]}" install -r requirements.txt
+elif [[ "$INSTALL_DEPS" == "auto" ]]; then
+  if ! "$PY" -c "import fastapi, joblib, lightgbm, numpy, pandas, pyarrow, pydantic, scipy, sklearn, uvicorn" >/dev/null 2>&1; then
+    log "installing missing dependencies from requirements.txt"
+    "${PIP[@]}" install -r requirements.txt
+  fi
+fi
+
+if [[ "$REBUILD_FEATURE_STORE" == "1" || "$REBUILD_FEATURE_STORE" == "true" ]]; then
+  log "rebuilding feature store"
+  "$PY" -m src.features.build_store
+elif [[ "$REBUILD_FEATURE_STORE" == "auto" && ! -f data/features/taluka_features.parquet ]]; then
+  log "building missing feature store"
+  "$PY" -m src.features.build_store
+fi
+
+PORT="$("$PY" - "$HOST" "$PORT" <<'PY'
+import socket
+import sys
+
+host = sys.argv[1]
+start = int(sys.argv[2])
+bind_host = "127.0.0.1" if host in {"localhost"} else host
+
+for port in range(start, start + 50):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        try:
+            sock.bind((bind_host, port))
+        except OSError:
+            continue
+        print(port)
+        break
+else:
+    raise SystemExit(f"No free port found from {start} to {start + 49}.")
+PY
+)"
+
+DISPLAY_HOST="$HOST"
+if [[ "$DISPLAY_HOST" == "0.0.0.0" || "$DISPLAY_HOST" == "::" ]]; then
+  DISPLAY_HOST="127.0.0.1"
+fi
+
+log "frontend: http://$DISPLAY_HOST:$PORT"
+log "api docs: http://$DISPLAY_HOST:$PORT/docs"
+
+UVICORN_ARGS=("$APP_MODULE" "--host" "$HOST" "--port" "$PORT")
+if [[ "$RELOAD" == "1" || "$RELOAD" == "true" ]]; then
+  UVICORN_ARGS+=("--reload")
+fi
+
+exec "$PY" -m uvicorn "${UVICORN_ARGS[@]}"

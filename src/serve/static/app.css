@@ -1,0 +1,733 @@
+/* ==========================================================================
+   Regur — crop & fertiliser engine
+   Palette is taken from Maharashtra's own ground: Deccan basalt, black cotton
+   soil (regur), turmeric, laterite, limewash. Not a generic "eco green".
+   ========================================================================== */
+:root{
+  /* Warm earth palette. Maharashtra's ground is laterite and sienna before it
+     is anything green, so the engine now reads as soil rather than canopy. */
+  --sienna:#A0522D;        /* the supplied sienna — surfaces, borders        */
+  --sand:#F4A460;          /* sandy brown — the working accent               */
+  --vermilion:#E35336;     /* the alarm colour: vetoes, deficiency, limits   */
+  --cream:#F5F5DC;         /* beige — all type                              */
+
+  /* base tones derived from sienna, so the darks stay in the same family */
+  --deep:#170C07;          /* deepest soil — page ground                     */
+  --loam:#22120C;          /* card surface                                   */
+  --loam-lift:#2C1810;     /* raised surface                                 */
+  --edge:#43261A;          /* hairline                                       */
+
+  --cream-2:rgba(245,245,220,.66);   /* 7.60:1 on loam — AA body      */
+  /* .38 measured 3.32:1 and failed AA for body text, and this token carries
+     every mono label, eyebrow and axis on the page. .58 clears it at 6.12:1. */
+  --cream-3:rgba(245,245,220,.58);   /* 6.12:1 on loam — AA body      */
+  --cream-4:rgba(245,245,220,.44);   /* 4.04:1 — large & decorative only */
+
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Archivo",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --deva:"Noto Serif Devanagari","Instrument Serif",serif;
+
+  --r-lg:26px; --r-md:16px; --r-sm:10px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --shadow:0 24px 64px -28px rgba(0,0,0,.95);
+
+  /* aliases so existing rules keep working against the new palette */
+  --basalt:var(--deep); --regur:var(--loam); --regur-lift:var(--loam-lift);
+  --regur-edge:var(--edge); --moss:var(--sienna); --kharif:var(--sand);
+  --haldi:var(--sand); --laterite:var(--vermilion);
+  --chuna:var(--cream); --chuna-2:var(--cream-2); --chuna-3:var(--cream-3);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--basalt); color:var(--chuna);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+button,input{font:inherit;color:inherit}
+
+/* atmosphere ------------------------------------------------------------- */
+.grain{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* Soil strata rather than a vague glow: horizons stacked the way a profile
+   pit actually reads, topsoil down to parent rock. */
+.horizon{
+  position:fixed; inset:auto 0 0 0; height:78vh; z-index:0; pointer-events:none;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(160,82,45,.06) 34%,
+      rgba(160,82,45,.12) 50%, rgba(160,82,45,.16) 68%,
+      rgba(58,52,40,.16) 82%, rgba(30,32,26,.30) 100%),
+    radial-gradient(130% 62% at 50% 128%, rgba(244,164,96,.14), transparent 60%),
+    radial-gradient(80% 48% at 12% 118%, rgba(232,163,61,.10), transparent 62%);
+}
+.horizon::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:46vh;
+  background-image:
+    linear-gradient(180deg,transparent 0 calc(100% - 1px),rgba(239,235,221,.05) 100%);
+  background-size:100% 34px;
+}
+main,header,footer{position:relative;z-index:1}
+
+/* masthead --------------------------------------------------------------- */
+.masthead{
+  animation:settle .8s var(--ease) backwards;
+  display:flex; justify-content:space-between; align-items:center; gap:24px;
+  padding:22px clamp(20px,4vw,54px); flex-wrap:wrap;
+  border-bottom:1px solid var(--regur-edge);
+}
+.mark{display:flex;align-items:center;gap:13px}
+.mark svg{width:31px;height:31px;fill:var(--moss);flex:none}
+.mark .vein{fill:none;stroke:var(--basalt);stroke-width:1.6;stroke-linecap:round}
+.mark b{
+  display:block;font-family:var(--sans);font-weight:700;font-size:15px;
+  letter-spacing:.24em;
+}
+.mark span{
+  display:block;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.1em;color:var(--chuna-3);text-transform:uppercase;
+}
+.masthead-meta{display:flex;gap:26px;flex-wrap:wrap}
+.stat{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--chuna-3)}
+.stat i{font-style:normal;color:var(--haldi);font-weight:600}
+
+/* console ---------------------------------------------------------------- */
+.console{
+  display:grid;
+  grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);
+  grid-template-areas:"lede atlas" "lede panel";
+  grid-template-rows:auto auto;
+  gap:clamp(26px,3.4vw,46px); align-items:start;
+  padding:clamp(40px,7vw,88px) clamp(20px,4vw,54px) clamp(28px,4vw,48px);
+  max-width:1360px;margin:0 auto;
+}
+.console-lede .eyebrow{animation:settle .7s var(--ease) .06s backwards}
+.sub{animation:settle .8s var(--ease) .46s backwards}
+.stages li{animation:settle .7s var(--ease) backwards}
+.stages li:nth-child(1){animation-delay:.56s}
+.stages li:nth-child(2){animation-delay:.63s}
+.stages li:nth-child(3){animation-delay:.70s}
+.stages li:nth-child(4){animation-delay:.77s}
+.atlas-wrap{animation:settle .9s var(--ease) .22s backwards}
+.console > .panel{animation:settle .9s var(--ease) .62s backwards}
+@keyframes settle{from{opacity:0;transform:translateY(16px)}}
+
+.eyebrow{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--haldi);margin:0 0 16px;
+}
+.console h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(46px,7.4vw,88px);line-height:.95;letter-spacing:-.015em;
+  margin:0 0 20px;
+}
+/* Each line is its own mask; the type rises out from under it. One
+   orchestrated entrance reads as intent, where a dozen scattered fades read
+   as decoration. */
+.console h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.console h1 .ln i{display:block;font-style:inherit;
+  animation:lift .95s var(--ease) backwards}
+.console h1 .ln:nth-child(1) i{animation-delay:.16s}
+.console h1 .ln:nth-child(2) i{animation-delay:.30s}
+@keyframes lift{from{transform:translateY(105%)}}
+.console h1 em{font-style:italic;color:var(--kharif)}
+.sub{margin:0 0 34px;color:var(--chuna-2);max-width:44ch;font-size:15.5px}
+
+/* the five stages, as a real sequence — order carries meaning here */
+.stages{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.stages li{
+  display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:baseline;
+  padding:13px 0;border-top:1px solid var(--regur-edge);
+}
+.stages li:last-child{border-bottom:1px solid var(--regur-edge)}
+.stages b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--haldi);
+  font-weight:600}
+.stages span{font-size:14px;color:var(--chuna-2)}
+.stages span i{font-style:normal;color:var(--chuna);font-weight:500}
+.stages em{font-style:normal;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--chuna-3);
+  display:block;margin-top:2px}
+
+.console-lede{grid-area:lede;align-self:start}
+.console > .atlas-wrap{grid-area:atlas;margin-bottom:22px}
+.console > .panel{grid-area:panel}
+@media(max-width:980px){
+  .console{grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"lede" "atlas" "panel";grid-template-rows:auto}
+}
+.atlas-wrap{position:relative}
+.atlas-frame{
+  position:relative;background:
+    radial-gradient(120% 100% at 30% 8%, rgba(160,82,45,.20), transparent 60%),
+    linear-gradient(168deg,var(--regur-lift),var(--regur));
+  border:1px solid var(--regur-edge);border-radius:var(--r-lg);
+  padding:18px 18px 14px;box-shadow:var(--shadow);overflow:hidden;
+}
+.atlas-frame::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(88% 72% at 50% 42%,transparent 62%,rgba(18,21,15,.30));
+}
+#atlas{width:100%;height:auto;display:block;overflow:visible}
+#atlas{filter:drop-shadow(0 0 14px rgba(244,164,96,.10))}
+/* The plate is black lines on white. Inverting turns it into white lines on
+   black, and screen blending drops the black entirely — leaving just the
+   district boundaries, which are then tinted to sand. */
+/* Pre-rendered with alpha, so the paper is already gone and no blend mode
+   is needed — just the cream district boundaries. */
+#atlas .plate{opacity:.20;animation:plate 1.6s var(--ease) .15s backwards}
+@keyframes plate{from{opacity:0}}
+#atlas .tk{transition:r .5s var(--ease),opacity .5s var(--ease);cursor:pointer}
+#atlas .tk:hover{r:6}
+#atlas .tk.dim{opacity:.62}
+#atlas .halo{fill:none;stroke:var(--kharif);stroke-width:1.4;opacity:0}
+#atlas .halo.on{animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{r:6;opacity:.85}70%,100%{r:30;opacity:0}}
+#atlas .pin{fill:var(--kharif);stroke:var(--basalt);stroke-width:1.6;
+  transition:opacity .4s;opacity:0}
+#atlas .pin.on{opacity:1}
+#atlas .lbl{font-family:var(--mono);font-size:11.5px;fill:var(--chuna);
+  letter-spacing:.06em;opacity:0;transition:opacity .4s;
+  paint-order:stroke;stroke:var(--basalt);stroke-width:3.5px;stroke-linejoin:round}
+#atlas .lbl.on{opacity:1}
+.atlas-legend{
+  position:absolute;left:20px;bottom:16px;display:flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--chuna-3);z-index:2;
+}
+.ar-scale{width:74px;height:4px;border-radius:2px;display:block;
+  background:linear-gradient(90deg,var(--vermilion),var(--sand),var(--cream))}
+.atlas-legend i{flex:1}
+.atlas-legend .tick{color:var(--cream-2);font-weight:500}
+#atlas .tk:focus-visible{outline:none}
+#atlas .tk:focus-visible ~ .focusring,
+#atlas .focusring{fill:none;stroke:var(--cream);stroke-width:2;opacity:0}
+#atlas .focusring.on{opacity:1}
+.atlas-read{
+  position:absolute;right:20px;bottom:12px;margin:0;font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--chuna-3);
+  text-align:right;z-index:2;max-width:52%;
+}
+@media(max-width:980px){.atlas-frame{margin-bottom:18px}}
+
+.panel{
+  min-width:0;
+  background:linear-gradient(168deg,var(--regur-lift),var(--regur));
+  border:1px solid var(--regur-edge); border-radius:var(--r-lg);
+  padding:clamp(22px,3vw,32px); box-shadow:var(--shadow);
+  display:grid; gap:22px;
+}
+.field{display:grid;gap:9px}
+.field > label,.field-water label,#season-label{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--chuna-3);
+}
+.combo{position:relative}
+.combo input{
+  width:100%;background:var(--basalt);border:1px solid var(--regur-edge);
+  border-radius:var(--r-md);padding:15px 17px;font-size:16px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.combo input::placeholder{color:var(--chuna-3)}
+.combo input:focus{
+  outline:none;border-color:var(--moss);
+  box-shadow:0 0 0 3px rgba(244,164,96,.22);
+}
+.options{
+  position:absolute;top:calc(100% + 7px);left:0;right:0;z-index:40;
+  margin:0;padding:6px;list-style:none;max-height:270px;overflow-y:auto;
+  background:var(--regur-lift);border:1px solid var(--regur-edge);
+  border-radius:var(--r-md);box-shadow:var(--shadow);
+}
+.options li{
+  padding:10px 13px;border-radius:9px;cursor:pointer;font-size:14.5px;
+  display:flex;justify-content:space-between;gap:12px;align-items:baseline;
+}
+.options li small{font-family:var(--mono);font-size:10.5px;color:var(--chuna-3);
+  text-transform:uppercase;letter-spacing:.08em}
+.options li:hover,.options li[aria-selected="true"]{background:rgba(160,82,45,.30)}
+.hint{margin:0;font-family:var(--mono);font-size:11px;color:var(--moss);
+  letter-spacing:.06em;min-height:1.2em}
+
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pills button,.toggle button{
+  background:var(--basalt);border:1px solid var(--regur-edge);
+  border-radius:999px;padding:10px 18px;cursor:pointer;font-size:14px;
+  color:var(--chuna-2);transition:.22s var(--ease);
+}
+.pills button:hover,.toggle button:hover{border-color:var(--moss);color:var(--chuna)}
+.pills button.on{background:var(--kharif);border-color:var(--kharif);
+  color:var(--basalt);font-weight:600}
+.toggle{display:inline-flex;background:var(--basalt);border-radius:999px;
+  padding:4px;border:1px solid var(--regur-edge);gap:4px}
+.toggle button{border:none;padding:9px 20px}
+.toggle button.on{background:var(--haldi);color:var(--basalt);font-weight:600}
+
+.soil{border-top:1px solid var(--regur-edge);padding-top:18px}
+.soil summary{
+  cursor:pointer;display:flex;align-items:center;gap:10px;list-style:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--chuna-2);
+}
+.soil summary::-webkit-details-marker{display:none}
+.soil summary::before{
+  content:"+";color:var(--haldi);font-size:15px;transition:transform .25s var(--ease);
+}
+.soil[open] summary::before{transform:rotate(45deg)}
+.soil summary small{color:var(--chuna-3);letter-spacing:.08em}
+.soil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+  gap:12px;margin-top:16px}
+.soil-grid label{
+  position:relative;display:grid;gap:6px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--chuna-3);
+}
+.soil-grid input{
+  background:var(--basalt);border:1px solid var(--regur-edge);
+  border-radius:var(--r-sm);padding:11px 34px 11px 12px;
+  font-family:var(--mono);font-size:14px;width:100%;
+}
+.soil-grid input:focus{outline:none;border-color:var(--moss)}
+.soil-grid i{
+  position:absolute;right:11px;bottom:11px;font-style:normal;
+  font-family:var(--mono);font-size:11px;color:var(--haldi);font-weight:600;
+}
+
+.run{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--kharif);color:var(--basalt);border:none;
+  border-radius:999px;padding:16px 24px;font-weight:700;font-size:15.5px;
+  cursor:pointer;transition:.25s var(--ease);
+}
+.run:hover{background:var(--haldi);transform:translateY(-2px)}
+.run:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.run svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .25s var(--ease)}
+.run:hover svg{transform:translateX(4px)}
+
+/* empty + loading -------------------------------------------------------- */
+.empty{text-align:center;padding:20px 20px 90px;color:var(--chuna-3)}
+.empty svg{width:56px;height:56px;fill:none;stroke:var(--regur-edge);stroke-width:2.4;
+  margin-bottom:14px}
+.empty .vein{stroke:var(--regur-edge)}
+.empty p{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase}
+
+.loading{text-align:center;padding:40px 20px 100px}
+.loading p{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--chuna-3);margin:22px 0 0}
+.staves{display:flex;gap:6px;justify-content:center;align-items:flex-end;height:62px}
+.staves i{
+  width:9px;background:var(--moss);border-radius:3px;
+  animation:stave 1.15s var(--ease) infinite;
+}
+.staves i:nth-child(1){animation-delay:0s}   .staves i:nth-child(2){animation-delay:.08s}
+.staves i:nth-child(3){animation-delay:.16s} .staves i:nth-child(4){animation-delay:.24s}
+.staves i:nth-child(5){animation-delay:.32s} .staves i:nth-child(6){animation-delay:.4s}
+.staves i:nth-child(7){animation-delay:.48s} .staves i:nth-child(8){animation-delay:.56s}
+@keyframes seed{from{opacity:0;r:0}}
+@keyframes stave{0%,100%{height:14px;opacity:.35}50%{height:56px;opacity:1}}
+
+/* results ---------------------------------------------------------------- */
+.results{padding:0 clamp(20px,4vw,54px) 90px;max-width:1360px;margin:0 auto}
+
+.context-strip{
+  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--regur-edge);
+  border-radius:var(--r-md);overflow:hidden;margin-bottom:44px;
+  background:var(--regur);
+}
+.ctx{flex:1 1 150px;min-width:0;padding:16px 20px;border-right:1px solid var(--regur-edge)}
+.ctx:last-child{border-right:none}
+.ctx b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--chuna-3);margin-bottom:5px;font-weight:400}
+.ctx span{font-family:var(--mono);font-size:19px;font-weight:500;color:var(--chuna)}
+.ctx span u{text-decoration:none;font-size:11px;color:var(--chuna-3);margin-left:3px}
+.ctx.flag{background:rgba(232,163,61,.09)}
+.ctx.flag span{color:var(--haldi);font-size:13px;line-height:1.35;display:block}
+
+.shortlist-head{display:flex;justify-content:space-between;align-items:baseline;
+  gap:20px;flex-wrap:wrap;margin-bottom:8px}
+.shortlist-head .eyebrow{margin:0}
+.shortlist-note{margin:0;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--chuna-3)}
+
+/* the arc — floating crop cards, lifted from the reference composition */
+.arc{
+  display:flex;justify-content:center;align-items:flex-end;gap:clamp(10px,1.6vw,22px);
+  padding:48px 0 56px;flex-wrap:wrap;
+}
+.crop{
+  --lift:0px; --tilt:0deg;
+  position:relative;width:clamp(140px,15vw,178px);
+  background:linear-gradient(170deg,var(--regur-lift),var(--regur));
+  border:1px solid var(--regur-edge);border-radius:22px;
+  padding:18px 16px 15px;cursor:pointer;text-align:left;
+  display:flex;flex-direction:column;min-height:214px;
+  transform:translateY(var(--lift)) rotate(var(--tilt));
+  transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
+  animation:rise .42s var(--ease) backwards, drift 7s ease-in-out infinite;
+  box-shadow:var(--shadow);
+}
+.crop:hover{border-color:var(--moss);box-shadow:0 30px 70px -30px rgba(0,0,0,1)}
+.crop.sel{border-color:var(--kharif);box-shadow:0 0 0 1px var(--kharif),var(--shadow)}
+.crop .art{
+  position:absolute;right:-14px;bottom:-10px;width:112px;height:112px;
+  color:var(--sand);opacity:.10;pointer-events:none;
+  transition:opacity .4s var(--ease),transform .5s var(--ease);
+}
+.crop:hover .art{opacity:.20;transform:scale(1.06) rotate(-3deg)}
+.crop.sel .art{opacity:.26;color:var(--sand)}
+.crop .rank{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--haldi);
+  font-weight:600;
+}
+.crop h3{
+  font-family:var(--serif);font-weight:400;font-size:clamp(19px,2vw,23px);
+  padding-right:34px;
+  line-height:1.08;margin:9px 0 3px;letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;min-height:2.16em;
+}
+.crop .deva{font-family:var(--deva);font-size:12.5px;color:var(--chuna-3);
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;
+  overflow:hidden;margin-bottom:14px;line-height:1.4;min-height:1.4em}
+/* the eight Liebig factors, in miniature — the card carries the same
+   evidence the detail widget expands, instead of dead space */
+.spark{display:flex;align-items:flex-end;gap:2px;height:32px;margin:2px 0 13px}
+.spark i{flex:1;border-radius:2px 2px 0 0;background:rgba(244,164,96,.42);
+  min-height:2px;transition:height .6s var(--ease)}
+.spark i.lo{background:var(--laterite)}
+.spark i.mid{background:var(--haldi)}
+.score-arc{position:absolute;top:15px;right:14px;width:38px;height:38px}
+.score-arc circle{fill:none;stroke-width:3;stroke-linecap:round}
+.score-arc .bg{stroke:rgba(239,235,221,.09)}
+.score-arc .fg{stroke:var(--kharif);transition:stroke-dashoffset .9s var(--ease)}
+.score-arc text{font-family:var(--mono);font-size:12px;font-weight:600;
+  fill:var(--chuna-2);text-anchor:middle;dominant-baseline:central}
+.score-arc::after{content:""}
+
+.crop .band{
+  margin-top:auto;display:flex;align-items:center;gap:7px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  padding-top:12px;border-top:1px solid var(--regur-edge);
+}
+.dot{width:7px;height:7px;border-radius:50%;flex:none}
+.dot.S1{background:var(--kharif)} .dot.S2{background:var(--moss)}
+.dot.S3{background:var(--haldi)}  .dot.N{background:var(--laterite)}
+.dot.irr{background:var(--haldi)}
+.crop .yc{margin-left:auto;color:var(--chuna-3)}
+.crop .water{
+  position:absolute;top:-9px;right:12px;background:var(--haldi);color:var(--basalt);
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;font-weight:600;
+  padding:3px 8px;border-radius:999px;text-transform:uppercase;
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px) rotate(var(--tilt))}}
+@keyframes drift{0%,100%{translate:0 0}50%{translate:0 -9px}}
+
+/* detail bento ------------------------------------------------------------ */
+.detail{display:grid;gap:16px;grid-template-columns:repeat(12,minmax(0,1fr))}
+.w{
+  min-width:0;
+  background:linear-gradient(168deg,var(--regur-lift),var(--regur));
+  border:1px solid var(--regur-edge);border-radius:var(--r-lg);
+  padding:clamp(17px,1.9vw,22px);animation:fade .38s var(--ease) backwards;
+}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+.w h4{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--chuna-3);margin:0 0 18px;font-weight:400;
+}
+.w-liebig{grid-column:span 7} .w-yield{grid-column:span 5}
+.w-dose{grid-column:span 7}   .w-split{grid-column:span 5}
+.w-micro{grid-column:span 12}
+/* Below the bento's useful width, collapse the track definition itself —
+   leaving 12 tracks in place lets their min-content width push the page
+   wider than the viewport. */
+@media(max-width:900px){
+  .detail{grid-template-columns:minmax(0,1fr)}
+  .w{grid-column:1/-1 !important}
+}
+
+/* signature: Liebig staves ------------------------------------------------ */
+.liebig{display:flex;align-items:flex-end;gap:clamp(6px,1vw,13px);height:190px;
+  position:relative;padding-bottom:30px}
+.stave{flex:1;display:flex;flex-direction:column;justify-content:flex-end;
+  align-items:center;height:100%;position:relative}
+.stave .bar{
+  width:100%;background:linear-gradient(180deg,var(--moss),rgba(160,82,45,.55));
+  border-radius:6px 6px 0 0;height:0;transition:height .85s var(--ease);
+  border:1px solid rgba(244,164,96,.24);border-bottom:none;
+}
+.stave.min .bar{animation:pulse 2.4s ease-in-out 1s 2}
+.stave.sev-bad  .bar{background:linear-gradient(180deg,var(--laterite),rgba(201,96,58,.45));
+  border-color:rgba(201,96,58,.55)}
+.stave.sev-warn .bar{background:linear-gradient(180deg,var(--haldi),rgba(232,163,61,.4));
+  border-color:rgba(232,163,61,.5)}
+.stave.sev-ok   .bar{background:linear-gradient(180deg,var(--kharif),rgba(244,164,96,.40));
+  border-color:rgba(244,164,96,.50)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,235,221,0)}
+  50%{box-shadow:0 0 0 7px rgba(239,235,221,.09)}}
+.stave .v{font-family:var(--mono);font-size:10.5px;margin-bottom:6px;color:var(--chuna-2)}
+.stave.min .v{font-weight:600}
+.stave.sev-bad .v,.stave.sev-bad .l{color:var(--laterite)}
+.stave.sev-warn .v,.stave.sev-warn .l{color:var(--haldi)}
+.stave.sev-ok .v,.stave.sev-ok .l{color:var(--kharif)}
+.stave .l{
+  position:absolute;bottom:-26px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--chuna-3);
+  white-space:nowrap;
+}
+
+.waterline{
+  position:absolute;left:0;right:0;border-top:1px dashed rgba(239,235,221,.3);
+  pointer-events:none;transition:bottom .85s var(--ease);
+}
+.waterline.sev-bad{border-color:rgba(201,96,58,.6)}
+.waterline.sev-warn{border-color:rgba(232,163,61,.55)}
+.waterline.sev-ok{border-color:rgba(244,164,96,.45)}
+.waterline b{
+  position:absolute;left:0;top:-18px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+  background:var(--regur);padding:1px 6px;border-radius:4px;color:var(--chuna-2);
+}
+.waterline.sev-bad b{color:var(--laterite)}
+.waterline.sev-warn b{color:var(--haldi)}
+.waterline.sev-ok b{color:var(--kharif)}
+.liebig-note{margin:14px 0 0;font-size:13.5px;color:var(--chuna-2);line-height:1.5}
+
+/* yield ------------------------------------------------------------------- */
+.yclass{font-family:var(--serif);font-size:clamp(38px,5vw,54px);line-height:1;
+  margin:0 0 6px}
+.yclass.above{color:var(--kharif)} .yclass.typical{color:var(--haldi)}
+.yclass.below{color:var(--laterite)}
+.yield-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--chuna-3);margin:0 0 20px}
+.range{position:relative;height:5px;background:var(--basalt);border-radius:3px;
+  margin:26px 0 10px}
+.range .fill{position:absolute;top:0;bottom:0;background:var(--moss);border-radius:3px;
+  transition:all .8s var(--ease)}
+.range .mid{position:absolute;top:-5px;width:2px;height:15px;background:var(--haldi);
+  transition:left .8s var(--ease)}
+.range-nums{display:flex;justify-content:space-between;font-family:var(--mono);
+  font-size:11px;color:var(--chuna-3)}
+.abstain{background:rgba(201,96,58,.1);border:1px solid rgba(201,96,58,.3);
+  border-radius:var(--r-md);padding:14px 16px;font-size:13px;color:var(--haldi-soft)}
+
+/* dose -------------------------------------------------------------------- */
+.npk-bar{display:flex;height:38px;border-radius:10px;overflow:hidden;
+  margin-bottom:11px;border:1px solid var(--regur-edge);background:var(--basalt)}
+.npk-bar span{display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--basalt);
+  width:0;transition:width .9s var(--ease);overflow:hidden;white-space:nowrap}
+.npk-bar .n{background:var(--cream)}
+.npk-bar .p{background:var(--sand)}
+.npk-bar .k{background:#8C4A2A}
+.npk-key{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.npk-key span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  color:var(--chuna-3);display:flex;align-items:center;gap:6px}
+.npk-key b{width:8px;height:8px;border-radius:2px;flex:none}
+/* key swatches must match the bar exactly, or the legend lies */
+.npk-key b.n{background:var(--cream)}
+.npk-key b.p{background:var(--sand)}
+.npk-key b.k{background:#8C4A2A}
+.npk-key u{text-decoration:none;color:var(--chuna);font-weight:500}
+
+.npk{display:flex;gap:11px;margin-bottom:20px}
+.npk div{flex:1;background:var(--basalt);border:1px solid var(--regur-edge);
+  border-radius:var(--r-md);padding:15px 13px;text-align:center}
+.npk b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  color:var(--chuna-3);margin-bottom:7px;font-weight:400}
+.npk span{font-family:var(--mono);font-size:25px;font-weight:600;color:var(--kharif)}
+.npk u{text-decoration:none;font-size:10px;color:var(--chuna-3);margin-left:2px}
+.mix{display:flex;flex-wrap:wrap;gap:8px}
+.mix span{background:var(--basalt);border:1px solid var(--regur-edge);
+  border-radius:999px;padding:8px 14px;font-family:var(--mono);font-size:12px}
+.mix span i{font-style:normal;color:var(--haldi)}
+.cost{margin:16px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--chuna-2)}
+.cost b{color:var(--kharif);font-size:16px}
+.est{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--haldi);
+  border:1px solid rgba(232,163,61,.4);border-radius:999px;padding:3px 9px}
+
+/* split schedule — laid along the season ---------------------------------- */
+.risk{font-style:normal;padding:2px 8px;border-radius:999px;font-size:9.5px}
+.risk.low{background:rgba(244,164,96,.16);color:var(--sand)}
+.risk.moderate{background:rgba(244,164,96,.24);color:var(--sand)}
+.risk.high{background:rgba(227,83,54,.20);color:var(--vermilion)}
+.timeline{position:relative;height:104px;margin:26px 0 8px}
+.timeline .track{position:absolute;left:0;right:0;bottom:22px;height:2px;
+  background:linear-gradient(90deg,var(--sand),rgba(244,164,96,.12));border-radius:2px}
+.drop{position:absolute;bottom:22px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  animation:drop .7s var(--ease) backwards}
+.drop:nth-child(2){animation-delay:.05s} .drop:nth-child(3){animation-delay:.15s}
+.drop:nth-child(4){animation-delay:.25s} .drop:nth-child(5){animation-delay:.35s}
+@keyframes drop{from{opacity:0;transform:translate(-50%,-14px)}}
+.drop b{width:3px;background:var(--sand);border-radius:2px;margin-bottom:5px}
+.drop u{text-decoration:none;font-family:var(--mono);font-size:13px;font-weight:600;
+  color:var(--cream);position:absolute;top:-6px;white-space:nowrap}
+.drop i{position:absolute;bottom:-20px;font-style:normal;font-family:var(--mono);
+  font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream-3);
+  white-space:nowrap}
+.drop::after{content:"";position:absolute;bottom:-5px;width:9px;height:9px;
+  border-radius:50%;background:var(--sand);border:2px solid var(--loam)}
+.tl-axis{display:flex;justify-content:space-between;font-family:var(--mono);
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-3);
+  border-top:1px solid var(--edge);padding-top:9px;margin-top:14px}
+.leach{margin:16px 0 0;font-size:13px;color:var(--cream-2);line-height:1.5}
+.leach.basal{margin-top:7px;color:var(--cream-3);font-size:12.5px}
+
+/* micronutrients — a dial each ------------------------------------------- */
+.micro{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.mc{display:flex;gap:16px;background:var(--deep);border:1px solid var(--edge);
+  border-radius:var(--r-md);padding:18px}
+.mc.high{border-color:rgba(227,83,54,.42);background:
+  linear-gradient(150deg,rgba(227,83,54,.10),var(--deep) 62%)}
+.dial{position:relative;width:64px;height:64px;flex:none}
+.dial svg{width:64px;height:64px;display:block}
+.dial circle{fill:none;stroke-width:5;stroke-linecap:round}
+.dial .bg{stroke:rgba(245,245,220,.10)}
+.dial .fg{stroke:var(--sand);transition:stroke-dashoffset 1.1s var(--ease)}
+.mc.high .dial .fg{stroke:var(--vermilion)}
+.dial .sym{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--mono);font-size:17px;font-weight:600;color:var(--cream)}
+.mc-body{min-width:0}
+.mc .pct{margin:0 0 3px;font-family:var(--mono);font-size:11.5px;color:var(--cream-3)}
+.mc .pct b{color:var(--vermilion);font-size:15px}
+.mc .rate{margin:0 0 7px;font-family:var(--mono);font-size:12.5px;color:var(--sand)}
+.mc .note{margin:0;font-size:12.5px;color:var(--cream-2);line-height:1.5}
+.mc .tag{display:inline-block;margin-top:9px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--cream-3);
+  border:1px solid var(--edge);border-radius:999px;padding:2px 8px}
+
+/* rejected ---------------------------------------------------------------- */
+.rejected{margin-top:38px}
+.rejected h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--chuna-3);margin:0 0 14px;font-weight:400}
+.veto{display:flex;flex-wrap:wrap;gap:8px}
+.veto span{background:rgba(201,96,58,.09);border:1px solid rgba(201,96,58,.26);
+  border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--chuna-2);
+  cursor:default}
+.veto span i{font-style:normal;font-family:var(--mono);font-size:10px;
+  color:var(--laterite);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+
+footer{
+  border-top:1px solid var(--regur-edge);padding:26px clamp(20px,4vw,54px);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  color:var(--chuna-3);text-align:center;
+}
+
+/* responsive -------------------------------------------------------------- */
+@media(max-width:980px){
+  .console{grid-template-columns:minmax(0,1fr)}
+  .arc{gap:12px;padding:30px 0 38px}
+  .crop{--tilt:0deg !important;--lift:0px !important;
+        width:calc(50% - 8px);max-width:210px;min-height:168px}
+  .context-strip .ctx{flex:1 1 46%}
+}
+@media(max-width:560px){
+  .crop{width:100%;max-width:none;min-height:0}
+  .npk{flex-direction:column}
+  .liebig{height:158px;gap:4px}
+  .stave .l{font-size:7.5px;letter-spacing:0}
+  .stave .v{font-size:9px}
+  .masthead-meta{gap:14px}
+  .context-strip .ctx{flex:1 1 100%;border-right:none;
+    border-bottom:1px solid var(--regur-edge)}
+  .console h1{font-size:clamp(38px,12vw,54px)}
+}
+
+/* a11y -------------------------------------------------------------------- */
+:focus-visible{outline:2px solid var(--haldi);outline-offset:3px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Pass informed by ui-ux-pro-max. Palette untouched — every change here is
+   contrast, affordance, feedback or redundant encoding.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Bento guidance: subtle hover lift on widgets so the grid feels alive and
+   the card under the pointer is unambiguous. */
+.w{transition:transform .25s var(--ease),border-color .25s var(--ease)}
+.w:hover{transform:translateY(-3px);border-color:rgba(160,82,45,.75)}
+
+/* "Row highlighting on hover" — the veto chips and context cells were inert. */
+.ctx{transition:background .2s var(--ease)}
+.ctx:hover{background:rgba(160,82,45,.14)}
+.veto span{transition:border-color .2s var(--ease),background .2s var(--ease)}
+.veto span:hover{background:rgba(227,83,54,.16);border-color:rgba(227,83,54,.5)}
+.mc{transition:transform .25s var(--ease),border-color .25s var(--ease)}
+.mc:hover{transform:translateY(-2px);border-color:rgba(244,164,96,.5)}
+
+/* Charts rule: never let colour alone carry meaning. The suitability dot now
+   pairs with a shape, so S1/S2/S3/N stay distinguishable in greyscale and to
+   a colour-blind reader. */
+.dot{position:relative}
+.dot.S1{border-radius:50%}
+.dot.S2{border-radius:2px}                       /* square      */
+.dot.S3{border-radius:2px;transform:rotate(45deg)}/* diamond     */
+.dot.N{border-radius:50%;background:transparent;
+  box-shadow:inset 0 0 0 2px var(--vermilion)}   /* hollow ring */
+.dot.irr{border-radius:2px;transform:rotate(45deg)}
+
+/* Styled tooltip for the Liebig staves — the native title attribute is slow
+   and unstyleable, and these values are the explanation layer. */
+.stave{cursor:help}
+.stave .tip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);
+  background:var(--deep);border:1px solid var(--edge);border-radius:8px;
+  padding:7px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.45;
+  color:var(--cream);white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .18s var(--ease),transform .18s var(--ease);z-index:5;
+  box-shadow:var(--shadow);
+}
+.stave:hover .tip,.stave:focus-within .tip{opacity:1;transform:translate(-50%,0)}
+.stave .tip b{color:var(--sand);font-weight:600}
+
+/* Decorative-only tones drop to the large-text token; body copy never does. */
+.masthead .stat,.atlas-read,.tl-axis,.drop i{color:var(--cream-4)}
+
+/* Touch target minimum — season and water pills were under 44px tall. */
+.pills button,.toggle button{min-height:44px}
+.options li{min-height:40px;align-items:center}
+
+/* 375px is the narrowest breakpoint the checklist asks for. */
+@media(max-width:400px){
+  .console{padding-left:16px;padding-right:16px}
+  .results{padding-left:16px;padding-right:16px}
+  .w{padding:16px}
+  .console h1{font-size:34px}
+  .mc{flex-direction:column;gap:12px}
+}
+
+
+/* ═══ scroll reveal ═════════════════════════════════════════════════════
+   Guidance: 300-400ms, power1.out, y offset 8-16px so it reads as a fade
+   rather than a slide. Implemented with IntersectionObserver instead of
+   GSAP+ScrollTrigger — this page has no build step, and pulling in two
+   libraries to fade four sections is not a trade worth making.
+
+   .reveal is only applied by script, so with JS off or reduced motion on,
+   every section renders at full opacity. */
+.reveal{opacity:0;transform:translateY(12px)}
+.reveal.seen{opacity:1;transform:none;
+  transition:opacity .36s cubic-bezier(.22,.61,.36,1),
+             transform .36s cubic-bezier(.22,.61,.36,1)}
+
+/* density: the data-dense style calls for tighter padding than the hero
+   wants, so the results region tightens and the console stays editorial */
+.results .ctx{padding:13px 16px}
+.context-strip{margin-bottom:34px}
+.arc{padding:34px 0 40px}
+.micro{gap:11px}
+.mc{padding:15px}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal.seen{opacity:1;transform:none;transition:none}
+}

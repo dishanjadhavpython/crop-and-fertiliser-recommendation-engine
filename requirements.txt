@@ -1,0 +1,15 @@
+fastapi==0.141.1
+httpx2==2.12.0
+joblib==1.5.3
+lightgbm==4.7.0
+matplotlib==3.11.1
+numpy==2.5.2
+pandas==3.0.5
+pyarrow==25.0.1
+pydantic==2.13.4
+pydantic_core==2.46.4
+pytest==9.1.1
+scikit-learn==1.9.0
+scipy==1.18.1
+tabulate==0.10.0
+uvicorn==0.52.4
