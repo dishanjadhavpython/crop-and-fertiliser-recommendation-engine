@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 
@@ -43,9 +43,21 @@ from src.models import (blend, conformal, ranker, yield_class, yield_quantile,
                         yield_regimes)
 from src.ontology.crop_map import CROP_ONTOLOGY, local_names, to_fertiliser_crop
 from src.rules import fertiliser as fz
+from src.rules import soil_fusion
+from src.rules.crop_requirements import get as crop_requirement
 from src.rules.soil_class import SoilTest, classify, taluka_soil_test
 from src.rules.suitability import score as suitability_score
 from src.rules.suitability import water_limited
+
+#: Feature families the out-of-distribution guard watches. Climate first,
+#: because that is what separates the Konkan from Marathwada; then soil
+#: physics; then the nutrient distribution.
+GUARD_PREFIXES = ("rain_", "aridity_", "lgp_", "cwb_", "gdd_", "tmax_mean_",
+                  "tmin_mean_", "dry_spell_", "rootzone_awc", "awc_mm_m",
+                  "depth_mm", "drainage_ord", "texture_ord", "ph_class_value",
+                  "ec_saline", "NI_", "def_", "leach_risk", "drought_vuln",
+                  "water_supply")
+
 
 # --------------------------------------------------------------- training ---
 @dataclass
@@ -90,7 +102,7 @@ def train(seeds: int = 3, verbose: bool = True) -> TrainedPipeline:
     y = yield_quantile.training_rows(df)
 
     log("S1  fitting the ranker ...")
-    rank_model = ranker.fit(df, feats)
+    rank_model = ranker.fit(df, feats, seeds=config.RANKER_SERVED_SEEDS, monotone=True)
 
     log("S3  fitting the two yield regimes and the tercile classifier ...")
     qmodels = yield_quantile.fit_quantiles(y, feats)
@@ -129,26 +141,53 @@ def train(seeds: int = 3, verbose: bool = True) -> TrainedPipeline:
     rank_skill = blend.per_crop_ranking_skill(ranker_oof, "_learned")
     alphas = blend.alpha_from_skill(rank_skill)
 
-    log("S5  calibrating conformal intervals ...")
+    log("S5  calibrating conformal intervals, per regime ...")
+    from src.eval.splits import forward_chaining, group_kfold
     conformal_q = {}
+    for regime, frame, rfeats, splitter in (
+            ("cold", hist, cold_feats, group_kfold),
+            ("warm", hist[hist["has_history"] == 1].reset_index(drop=True),
+             warm_feats, forward_chaining)):
+        q = yield_regimes.oof_quantiles(frame, rfeats, splitter)
+        m = frame.join(q).dropna(subset=["p10", "p90"])
+        for alpha in config.CONFORMAL_ALPHAS:
+            sc = conformal.SplitConformal(alpha).calibrate(m["yield_z"], m["p10"], m["p90"])
+            conformal_q[(regime, alpha)] = sc.q_
+    # the scalar keys stay, so anything still reading conformal_q[0.1] gets the
+    # cold-start widening rather than a KeyError
     for alpha in config.CONFORMAL_ALPHAS:
-        sc = conformal.SplitConformal(alpha).calibrate(y["yield_z"], y["p10"], y["p90"])
-        conformal_q[alpha] = sc.q_
+        conformal_q[alpha] = conformal_q[("cold", alpha)]
 
     log("S5  fitting the out-of-distribution guard ...")
     # Fitted on the 351 TALUKAS, not on the 34 district means. The first
     # version was fitted on the same district vectors it then scored, so
     # nothing was ever out-of-distribution and it fired on 0 of 30 queries.
     store = build_feature_store()
+    # Explicit, and spanning what the query actually varies over: climate, soil
+    # physics and soil chemistry. The first version took "the first 40 complete
+    # columns", which happened to be Soil Health Card nutrient distributions
+    # only — so the guard could not see a climatically unusual taluka at all,
+    # while a farmer typing EC = high wrote 100 into one of the columns it did
+    # watch and tripped it. Farmer readings are range-checked at the API
+    # instead; the guard is scored on the taluka as surveyed.
     guard_cols = [c for c in store_feature_columns(store)
-                  if store[c].notna().all()][:40]
+                  if store[c].notna().all()
+                  and c.startswith(GUARD_PREFIXES)][:60]
     # quantile=1.0: the cut sits at the largest distance in the served corpus,
     # so a taluka that IS training data never abstains. See the class docstring
     # for the regional-holdout evidence that it still detects real novelty.
     guard = conformal.MahalanobisGuard(quantile=1.0).fit(store[guard_cols])
 
-    crop_stats = (y.groupby("Crop")[["crop_yield_mean", "crop_yield_std"]]
-                    .first().reset_index())
+    # The z-score is taken within (Crop, Year), so converting a prediction back
+    # to t/ha needs a year's statistics. ``.first()`` took 2015-16 — the oldest
+    # year in the panel — so every yield a farmer read was expressed on a scale
+    # eight years out of date. The most recent three years are averaged instead,
+    # falling back to the whole panel for a crop absent from them.
+    stats_cols = ["crop_yield_mean", "crop_yield_std"]
+    overall = y.groupby("Crop")[stats_cols].mean()
+    recent_years = sorted(y["Year"].unique())[-3:]
+    recent = y[y["Year"].isin(recent_years)].groupby("Crop")[stats_cols].mean()
+    crop_stats = recent.reindex(overall.index).fillna(overall).reset_index()
     store = build_feature_store()
     leach_q = store["leach_risk"].rank(pct=True)
     leach_q.index = pd.MultiIndex.from_frame(store[config.KEY])
@@ -165,24 +204,44 @@ def train(seeds: int = 3, verbose: bool = True) -> TrainedPipeline:
                            history=latest)
 
 
-def _cache_key() -> str:
-    """Fingerprint of everything the fitted pipeline depends on.
+def cache_inputs() -> list[Path]:
+    """Every file the fitted pipeline depends on.
 
-    The feature store plus the source of every module that shapes the models.
-    Any edit to those invalidates the cache, so a stale pipeline can never be
-    served after a code or data change.
+    The first version hashed ``taluka_features.parquet`` — which serving never
+    reads, because ``build_feature_store()`` rebuilds from the raw CSVs — plus
+    nine hand-listed modules. Everything else could change without changing the
+    key: the raw data itself, ``pipeline.py``, and the feature blocks. A stale
+    pipeline could therefore be served after a real change, which is the one
+    thing a cache key exists to prevent. ``scorecard.py`` gates on this list.
     """
+    src = Path(__file__).resolve().parent
+    raw = [p for p in config.RAW.iterdir() if p.suffix in (".csv", ".json")]
+    extra = [p for p in (config.ARTIFACTS / "model_selection.json",) if p.exists()]
+    return sorted(set(raw) | set(src.rglob("*.py")) | set(extra))
+
+
+def _cache_key() -> str:
+    """Fingerprint of everything in ``cache_inputs()``, plus the library versions.
+
+    Source is hashed by content. Raw data is hashed by name, size and
+    modification time instead: the weather panel alone is ~230 MB and serving
+    would otherwise re-read all of it on every start. The failure that would
+    need — editing a CSV in place without changing its size or its mtime — is
+    not one that happens by accident, and re-copying a file invalidates the key
+    in the safe direction.
+    """
+    import lightgbm
+    import sklearn
+
     h = hashlib.sha256()
-    store = config.FEATURES / "taluka_features.parquet"
-    if store.exists():
-        h.update(store.read_bytes())
-    for mod in ("config.py", "data/training_set.py", "models/ranker.py",
-                "models/yield_quantile.py", "models/blend.py",
-                "models/conformal.py", "features/build_store.py",
-                "rules/suitability.py", "rules/crop_requirements.py"):
-        f = Path(__file__).parent / mod
-        if f.exists():
+    for f in cache_inputs():
+        h.update(str(f.name).encode())
+        if f.suffix == ".py":
             h.update(f.read_bytes())
+        else:
+            stat = f.stat()
+            h.update(f"{stat.st_size}:{stat.st_mtime_ns}".encode())
+    h.update(f"lightgbm{lightgbm.__version__}sklearn{sklearn.__version__}".encode())
     return h.hexdigest()[:16]
 
 
@@ -304,6 +363,8 @@ def recommend(
     *,
     soil_test: SoilTest | None = None,
     irrigated: bool = False,
+    soil_photo: dict[str, float] | None = None,
+    photo_in_distribution: bool = True,
     top_k: int = 5,
     pipe: TrainedPipeline | None = None,
 ) -> Recommendation:
@@ -311,20 +372,99 @@ def recommend(
     pipe = pipe or load_pipeline()
     district, taluka = district.upper(), taluka.upper()
     feats = taluka_row(district, taluka)
+    # The taluka as surveyed, kept before any farmer reading is substituted in.
+    # The out-of-distribution guard is scored on this: whether this *place* is
+    # unlike the places the model learned from is not a question a farmer's own
+    # pH or EC reading can answer.
+    surveyed = dict(feats)
+
+    # ---- the farmer's photograph, weighed against the survey ---------------
+    # `soil_photo` is the classifier's calibrated probabilities over its own
+    # classes. The survey is the prior and the photograph the evidence; the
+    # fusion may move texture and available water, and may never touch depth,
+    # drainage or salinity, so a photograph can add a constraint but never lift
+    # a veto. It is computed against `surveyed` above, not the fused features,
+    # for the same reason the OOD guard is.
+    fusion = soil_fusion.fuse(
+        _surveyed_soil(district, taluka), soil_photo, config.F_SOIL_MODEL_META,
+        in_distribution=photo_in_distribution)
+    feats = soil_fusion.apply_to_features(feats, fusion)
 
     # ---- S4 layer 1: which fertility class is this land in? ----------------
-    test = soil_test or taluka_soil_test(feats)
+    # Field by field, because a card is often read in part. A missing nutrient
+    # used to fall through to the Medium archetype inside the interpolation —
+    # a different field's dose — rather than to this taluka's own value, and
+    # the answer then claimed to come from the farmer's card regardless.
+    taluka_test = taluka_soil_test(feats)
+    sources: dict[str, str] = {}
+    if soil_test is None:
+        test = taluka_test
+        for key in ("N", "P", "K", "OC"):
+            sources[key] = "taluka SHC distribution"
+    else:
+        filled = {}
+        for attr, key in (("n_kg_ha", "N"), ("p_kg_ha", "P"),
+                          ("k_kg_ha", "K"), ("oc_pct", "OC")):
+            given = getattr(soil_test, attr)
+            filled[attr] = given if given is not None else getattr(taluka_test, attr)
+            sources[key] = ("farmer soil health card" if given is not None
+                            else "taluka SHC distribution")
+        test = replace(soil_test, **filled)
+
+    given_ph = soil_test is not None and soil_test.ph is not None
+    given_ec = soil_test is not None and soil_test.ec_status is not None
+    farmer_micro = (soil_test.micronutrients or {}) if soil_test is not None else {}
+    sources["pH"] = ("farmer soil health card" if given_ph
+                     else "taluka soil survey pH class")
+    sources["EC"] = ("farmer soil health card" if given_ec
+                     else "taluka SHC distribution")
+    for comp in config.MICRONUTRIENTS:
+        sources[comp] = ("farmer soil health card" if farmer_micro.get(comp)
+                         else "taluka SHC distribution")
+
     soil_class = classify(test)
-    source = "farmer soil health card" if soil_test else "taluka SHC distribution"
+    from_card = sum(1 for v in sources.values() if v == "farmer soil health card")
+    source = ("taluka SHC distribution" if from_card == 0
+              else "farmer soil health card" if from_card == len(sources)
+              else f"farmer soil health card ({from_card} of {len(sources)} readings; "
+                   f"the rest from the taluka)")
+
+    # The farmer's own pH/EC reading, when given, replaces the taluka average
+    # for every rule downstream (S2's Liebig gate, S5's OOD guard) — the same
+    # "a real reading from this field outranks a taluka-wide average"
+    # principle as the N/P/K/OC override above, applied to the two SHC
+    # components that feed rules rather than the fertility-class table.
+    if test.ph is not None:
+        feats["ph_class_value"] = test.ph
+    # EC is asymmetric, because the card's verdict and the survey's statistic
+    # are not the same quantity. `ec_saline` is the share of the taluka's
+    # samples in the survey's *saline class* — a rare class: the statewide
+    # median share is 0.1% and the maximum 39%. The card's "high" only says the
+    # reading is above the range printed on that card (0.2-0.9 dS/m on the
+    # fixture card, which reads 1.06). That is far short of the saline class,
+    # so it cannot be substituted as "100% of samples saline": doing so zeroed
+    # the salinity factor for every crop in the table, sorghum and safflower
+    # included — the two the table itself calls salt-tolerant — and a farmer
+    # whose EC was a whisker over range was told nothing at all could be grown.
+    #
+    # "normal" or "low" does settle it: a reading inside the card's range is
+    # certainly below the saline class, so this field is not saline. "high"
+    # does not, so the survey's share stays as the best estimate and the
+    # reading travels to the farmer as a caution (see `_salinity_caution`).
+    if test.ec_status is not None and test.ec_status != "high":
+        feats["ec_saline"] = 0.0
 
     # ---- S5 out-of-distribution guard --------------------------------------
-    # Scored on THIS taluka against the 351-taluka distribution, so an unusual
-    # place genuinely trips it.
-    missing = [c for c in pipe.guard_features if c not in feats]
+    # Scored on THIS taluka as surveyed, against the 351-taluka distribution.
+    # The snapshot is taken before the farmer's readings are substituted in:
+    # the question the guard answers is "is this place unlike the places the
+    # model learned from", and a farmer's own pH is not evidence about that.
+    guard_feats = {c: surveyed[c] for c in pipe.guard_features if c in surveyed}
+    missing = [c for c in pipe.guard_features if c not in surveyed]
     if missing:
         ood, novelty = True, float("nan")
     else:
-        x = pd.DataFrame([{c: feats[c] for c in pipe.guard_features}])
+        x = pd.DataFrame([guard_feats])
         ood = bool(pipe.guard.is_outlier(x)[0])
         novelty = float(pipe.guard.novelty(x)[0])
 
@@ -332,7 +472,8 @@ def recommend(
     candidates = list(CROP_ONTOLOGY) + sorted(
         c for c in _apy_crops() if c not in CROP_ONTOLOGY
     )
-    query = _query_frame(district, season, candidates, pipe)
+    query = _taluka_fit(_query_frame(district, season, candidates, pipe),
+                        district, feats, irrigated)
     learned = pd.Series(pipe.ranker_model.predict(query[pipe.features]), index=candidates)
 
     # ---- S2 rule scores and hard vetoes ------------------------------------
@@ -396,7 +537,7 @@ def recommend(
     advice = []
     for rank, row in enumerate(keep[:top_k], start=1):
         advice.append(_build_advice(rank, row, suit, feats, district, taluka,
-                                    test, soil_class, season, pipe, ood))
+                                    test, soil_class, season, pipe, ood, irrigated))
 
     return Recommendation(
         district=district, taluka=taluka, season=season, irrigated=irrigated,
@@ -409,17 +550,45 @@ def recommend(
             f"threshold). The learned ranker is suppressed and these "
             f"recommendations come from the agronomic rule scorer alone."
             if ood else None),
-        water_limited=water_limited(feats, season),
+        water_limited=water_limited(feats, season, irrigated=irrigated),
         crops=advice,
         vetoed=vetoed,
         not_assessable=not_assessable,
-        micronutrients=fz.micronutrient_plan(feats),
-        context=_context(feats, season, test),
+        micronutrients=fz.micronutrient_plan(feats, farmer_micro=test.micronutrients),
+        context={**_context(feats, season, test, sources, fusion),
+                 **_salinity_caution(test, advice)},
     )
 
 
+#: The crop table's own salt-tolerant group starts here: its notes call sorghum
+#: (25) salt-tolerant, safflower (30) very salt-tolerant, and mustard (20) more
+#: tolerant than most oilseeds. Below it are the crops a saline reading should
+#: make a farmer think twice about.
+SALT_TOLERANT_PCT = 20.0
+
+
+def _salinity_caution(test: SoilTest, advice: list) -> dict:
+    """What a card reading of EC "high" means for this farmer's own list.
+
+    Not a veto — the reading cannot place the field in the survey's saline class
+    (see the EC note in `recommend`). It is still this field's own measurement,
+    so it is reported, together with which of the ranked crops the requirement
+    table rates least able to take salt.
+    """
+    if test.ec_status != "high":
+        return {"ec_card_high": False, "ec_least_tolerant": []}
+    least = []
+    for item in advice:
+        # The table is keyed by agronomic name (Chickpea), the list by the
+        # market name (Gram); the same bridge the gate itself crosses.
+        req = crop_requirement(to_fertiliser_crop(item.crop) or item.crop)
+        if req is not None and req.max_saline_pct < SALT_TOLERANT_PCT:
+            least.append(item.crop)
+    return {"ec_card_high": True, "ec_least_tolerant": least}
+
+
 def _build_advice(rank, row, suit, feats, district, taluka, test, soil_class,
-                  season, pipe, ood) -> CropAdvice:
+                  season, pipe, ood, irrigated=False) -> CropAdvice:
     s = suit[row.Crop]
     alpha = pipe.alphas.get(row.Crop, 0.0)
     decided = "rules (out of distribution)" if ood else (
@@ -448,7 +617,8 @@ def _build_advice(rank, row, suit, feats, district, taluka, test, soil_class,
 
     # ---- S4 fertiliser ------------------------------------------------------
     if fert_crop:
-        adv.fertiliser = _fertiliser_plan(district, taluka, fert_crop, feats, test, pipe)
+        adv.fertiliser = _fertiliser_plan(district, taluka, fert_crop, feats, test,
+                                          pipe, season, irrigated)
     return adv
 
 
@@ -498,7 +668,7 @@ def _attach_yield(adv, apy_crop: str, district: str, season: str, pipe) -> None:
         )
         return
 
-    band = _yield_band(apy_crop, district, season, pipe, query, key)
+    band = _yield_band(apy_crop, district, season, pipe, query, key)  # widened per regime
     if band:
         adv.yield_p10_t_ha, adv.yield_p50_t_ha, adv.yield_p90_t_ha = band
         adv.yield_interval_note = (
@@ -546,7 +716,8 @@ def _yield_band(apy_crop, district, season, pipe, query=None, regime="cold") -> 
     models = pipe.regimes[f"{regime}_quantiles"] if pipe.regimes else pipe.quantile_models
     feats = pipe.regimes[f"{regime}_features"] if pipe.regimes else pipe.features
     zs = {a: float(m.predict(q[feats])[0]) for a, m in models.items()}
-    widen = pipe.conformal_q.get(0.1, 0.0)
+    # the widening measured on THIS regime's own out-of-fold predictions
+    widen = pipe.conformal_q.get((regime, 0.1), pipe.conformal_q.get(0.1, 0.0))
     lo = min(zs.values()) - widen
     hi = max(zs.values()) + widen
     mid = zs[0.5]
@@ -554,17 +725,26 @@ def _yield_band(apy_crop, district, season, pipe, query=None, regime="cold") -> 
     return tuple(round(max(0.0, float(b)), 2) for b in band)
 
 
-def _fertiliser_plan(district, taluka, fert_crop, feats, test, pipe) -> dict | None:
+def _fertiliser_plan(district, taluka, fert_crop, feats, test, pipe,
+                     season=None, irrigated=False) -> dict | None:
+    """The dose for THIS farmer's season and water regime.
+
+    The table publishes several recipes for one crop in one district and they
+    differ materially; serving used to ask for none of them, so an irrigated
+    Rabi query could be answered with the rainfed Kharif dose.
+    """
     from src.rules.cost_optimiser import compare_with_table, optimise
 
     pct = float(pipe.leach_quantiles.get((district, taluka), 0.5))
-    rec = fz.recommend(district, fert_crop, feats, soil_test=test, leach_percentile=pct)
+    rec = fz.recommend(district, fert_crop, feats, soil_test=test, leach_percentile=pct,
+                       want_season=season, want_irrigated=irrigated)
     if rec is None:
-        return _state_median_plan(fert_crop, feats, test, pct)
+        return _state_median_plan(fert_crop, feats, test, pct, season, irrigated)
 
     opts = {}
     for opt in (1, 2):
-        hit = fz.lookup(district, fert_crop, rec.soil_class, option=opt)
+        hit = fz.lookup(district, fert_crop, rec.soil_class, option=opt,
+                        want_season=season, want_irrigated=irrigated)
         if hit:
             opts[opt] = hit["products"]
 
@@ -583,6 +763,10 @@ def _fertiliser_plan(district, taluka, fert_crop, feats, test, pipe) -> dict | N
     return {
         "available": True,
         "soil_class": rec.soil_class,
+        # which published recipe this is, so the answer can be checked against
+        # the table rather than taken on trust
+        "context": rec.context,
+        "requested": {"season": season, "irrigated": bool(irrigated)},
         "table_products_kg_ha": rec.exact_table["products"],
         "table_target_kg_ha": rec.exact_table["target"],
         "interpolated_target_kg_ha": rec.interpolated_target,
@@ -594,23 +778,25 @@ def _fertiliser_plan(district, taluka, fert_crop, feats, test, pipe) -> dict | N
     }
 
 
-def _state_median_plan(fert_crop, feats, test, pct) -> dict:
+def _state_median_plan(fert_crop, feats, test, pct, season=None, irrigated=False) -> dict:
     """Fallback for the 36% of (crop, district) cells the table omits."""
     from src.rules.cost_optimiser import optimise
 
     soil_class = classify(test)
-    hit = fz.state_median_lookup(fert_crop, soil_class)
+    hit = fz.state_median_lookup(fert_crop, soil_class, want_season=season,
+                                 want_irrigated=irrigated)
     if hit is None:
         return {"available": False, "estimated": False,
                 "note": f"No fertiliser recommendation exists for {fert_crop} "
                         f"anywhere in the table."}
 
-    targets = fz.crop_targets_state(fert_crop)
+    targets = fz.crop_targets_state(fert_crop, want_season=season,
+                                    want_irrigated=irrigated)
     target = (fz.interpolate_target(targets, test) if len(targets) == 3
               else dict(hit["target"]))
     target = {k: round(v, 1) for k, v in target.items() if v is not None}
 
-    micro = fz.micronutrient_plan(feats)
+    micro = fz.micronutrient_plan(feats, farmer_micro=test.micronutrients)
     return {
         "available": True,
         "estimated": True,
@@ -642,16 +828,47 @@ def _query_frame_cached(district: str, season: str, crops: tuple,
     template = df[(df["District"] == district) & (df["Season"] == season)]
     if template.empty:
         template = df[df["Season"] == season]
+    # The latest year, not the first. Rows arrive oldest-first, so ``iloc[0]``
+    # served every farmer the 2015-16 row — its year_index, its lagged history
+    # and its crop statistics — for a question about the coming season.
+    newest = template["Year"].max()
+    latest = template[template["Year"] == newest]
     rows = []
     for crop in crops:
-        hit = template[template["Crop"] == crop]
-        rows.append((hit.iloc[0] if not hit.empty else template.iloc[0]).copy())
+        hit = latest[latest["Crop"] == crop]
+        if hit.empty:
+            hit = template[template["Crop"] == crop].sort_values("Year").tail(1)
+        rows.append((hit.iloc[0] if not hit.empty else latest.iloc[0]).copy())
     out = pd.DataFrame(rows).reset_index(drop=True)
     out["Crop"] = list(crops)
     out["District"] = district
     out["Season"] = season
     # the serving frame must carry exactly the features the model was fitted on
     return attach_fit_features(out)
+
+
+def _taluka_fit(query: pd.DataFrame, district: str, feats: dict,
+                irrigated: bool) -> pd.DataFrame:
+    """Recompute the agronomic-fit block from THIS taluka and THIS farmer.
+
+    The ranker's other features are district properties, and have to be: the
+    labels are district-level, so nothing finer can be learned from them. The
+    fit block is different in kind — it is *computed*, not learned, S2 scoring a
+    crop against land — so at serving there is no reason to evaluate it on a
+    district average when the farmer's own taluka is known, with their own pH
+    and EC substituted and their own water regime assumed. The same quantity,
+    at a finer resolution.
+
+    This is what lets a card change the ranking at all. Before it, the twelve
+    readings reached the gate and the dose but never the learned score, so two
+    farmers in one district with different soil got the same ranked list.
+    """
+    source = pd.DataFrame([{**feats, "District": district}]).set_index("District")
+    fit = compute(query, source, key="District", irrigated=irrigated)
+    out = query.copy()          # _query_frame is lru_cached: never mutate it
+    for col in fit.columns:
+        out[col] = fit[col].to_numpy()
+    return out
 
 
 def _query_frame(district: str, season: str, crops: list, pipe) -> pd.DataFrame:
@@ -662,8 +879,61 @@ def _query_frame(district: str, season: str, crops: list, pipe) -> pd.DataFrame:
     return _query_frame_cached(district, season, tuple(crops), key)
 
 
-def _context(feats: dict, season: str, test: SoilTest) -> dict:
+def _surveyed_soil(district: str, taluka: str) -> dict | None:
+    """What the soil survey says is actually under this taluka.
+
+    The feature store keeps only the numeric derivations of this — depth in
+    millimetres, drainage as an ordinal, a black-soil flag — because that is
+    what the gate consumes. The words themselves never reach a caller, and a
+    caller now wants them: the app classifies a photograph of the farmer's own
+    soil and has nothing to check the answer against.
+
+    This was deliberately description rather than signal for as long as the
+    engine took no image. It is now also the **prior** for `soil_fusion`, which
+    weighs the farmer's photograph against it — see `recommend`.
+
+    The words still never reach the gate directly. What reaches the gate is the
+    fused soil type's effect on the soil-class flags and available water, and
+    never on depth, drainage or salinity: those keep the surveyed value, which
+    is what stops a misread photograph from lifting a veto.
+    """
+    from src.data.load import load_soil_type
+
+    df = load_soil_type()
+    hit = df[(df["District"] == district.upper()) & (df["Taluka"] == taluka.upper())]
+    if hit.empty:
+        return None
+    r = hit.iloc[0]
+
+    def _s(col: str):
+        v = r.get(col)
+        return None if v is None or pd.isna(v) else str(v)
+
     return {
+        "soil_type": _s("Soil_Type"),
+        "soil_type_secondary": _s("Soil_Type_Secondary"),
+        "share_pct": None if pd.isna(r.get("Soil_Type_Share_pct"))
+        else round(float(r["Soil_Type_Share_pct"]), 1),
+        "texture": _s("Soil_Texture"),
+        "depth": _s("Soil_Depth"),
+        "drainage": _s("Soil_Drainage"),
+        "parent_material": _s("Soil_Parent_Material"),
+        "points_sampled": None if pd.isna(r.get("Soil_Points_Sampled"))
+        else int(r["Soil_Points_Sampled"]),
+    }
+
+
+def _context(feats: dict, season: str, test: SoilTest,
+             sources: dict[str, str] | None = None,
+             fusion: soil_fusion.Fusion | None = None) -> dict:
+    return {
+        # The taluka as the soil survey records it. This was description only
+        # for as long as the engine took no image — a photograph had nothing to
+        # do but sit beside it in the UI. `recommend` now weighs the farmer's
+        # photograph against it, so `soil_fusion` below says what the photograph
+        # was allowed to do and whether it changed the answer at all.
+        "surveyed_soil": _surveyed_soil(feats["District"], feats["Taluka"]),
+        "soil_fusion": fusion.as_dict() if fusion is not None else None,
         "annual_rainfall_mm": round(float(feats["rain_annual"]), 0),
         "season_rainfall_mm": round(float(feats.get(f"rain_{season}", np.nan)), 0)
         if season in config.SEASONS else None,
@@ -675,5 +945,20 @@ def _context(feats: dict, season: str, test: SoilTest) -> dict:
         "leach_risk": round(float(feats["leach_risk"]), 1),
         "soil_test": {k: (round(v, 1) if v is not None else None)
                       for k, v in test.as_dict().items()},
+        # Per-field provenance for the two SHC components that feed rules
+        # rather than the fertility table — mirrors "soil_test_source" above,
+        # one level more granular. The taluka value actually used is echoed
+        # too so a farmer's own reading is visibly reflected, not just claimed.
+        # Per reading, because a card is often read in part: which of the twelve
+        # came from this farmer's card and which from the taluka.
+        "soil_test_sources": dict(sources or {}),
+        "ph_source": (sources or {}).get(
+            "pH", "farmer soil health card" if test.ph is not None
+            else "taluka soil survey pH class"),
+        "ph_used": round(float(feats["ph_class_value"]), 2),
+        "ec_source": (sources or {}).get(
+            "EC", "farmer soil health card" if test.ec_status is not None
+            else "taluka SHC distribution"),
+        "ec_saline_pct_used": round(float(feats["ec_saline"]), 1),
         "shc_samples": int(feats["n_samples"]),
     }

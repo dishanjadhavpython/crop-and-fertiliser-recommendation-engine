@@ -41,10 +41,17 @@ def prepare(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def feature_sets(df: pd.DataFrame) -> tuple[list[str], list[str]]:
-    """(cold-start features, warm-start features)."""
+    """(cold-start features, warm-start features).
+
+    Both include ``wx_*``, the weather the season actually had. The yield model
+    explains an outcome after the fact, so that is legitimate here — and it is
+    why S3's skill is reported as an upper bound on what could be *forecast*,
+    with serving running the model across historical seasons to show the spread
+    instead of pretending next year's weather is known.
+    """
     from src.data.training_set import model_features
 
-    all_feats = model_features(df)
+    all_feats = model_features(df, include_year_weather=True)
     cold = [c for c in all_feats if c not in LAG_COLUMNS]
     warm = cold + [c for c in LAG_COLUMNS if c in df.columns]
     return cold, warm
@@ -90,6 +97,36 @@ def evaluate(df: pd.DataFrame, seeds: int = 3) -> pd.DataFrame:
             "note": note,
         })
     return pd.DataFrame(rows)
+
+
+def oof_quantiles(df: pd.DataFrame, feats: list[str], splitter,
+                  seeds: int = 1) -> pd.DataFrame:
+    """Out-of-fold p10/p50/p90 from **this regime's own** models.
+
+    The conformal widening used to be calibrated on the global, sample-weighted
+    quantile models and then applied to the regime models that actually serve,
+    so the correction a farmer's interval carried had been measured on a
+    different model. Each regime is calibrated on itself, under the protocol
+    that matches it.
+    """
+    acc = {a: np.zeros(len(df)) for a in config.QUANTILES}
+    cnt = np.zeros(len(df))
+    for s in range(seeds):
+        for tr, te in splitter(df):
+            for a in config.QUANTILES:
+                m = LGBMRegressor(**yield_quantile.QUANTILE_PARAMS, alpha=a,
+                                  random_state=config.SEED + s)
+                m.fit(df.iloc[tr][feats], df.iloc[tr]["yield_z"])
+                acc[a][te] += m.predict(df.iloc[te][feats])
+            cnt[te] += 1
+    out = pd.DataFrame(
+        {f"p{int(a * 100)}": np.where(cnt > 0, acc[a] / np.maximum(cnt, 1), np.nan)
+         for a in config.QUANTILES}, index=df.index)
+    # independently fitted quantiles can cross; sorting restores order
+    ok = out.notna().all(axis=1)
+    out.loc[ok, ["p10", "p50", "p90"]] = np.sort(
+        out.loc[ok, ["p10", "p50", "p90"]].to_numpy(), axis=1)
+    return out
 
 
 def crop_skill(df: pd.DataFrame, seeds: int = 3) -> pd.DataFrame:

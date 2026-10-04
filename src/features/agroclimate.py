@@ -155,7 +155,7 @@ def _summarise(g: pd.DataFrame, tag: str) -> dict:
     return f
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=None)   # 29 weather years now, not 3
 def build(year: str | None = None) -> pd.DataFrame:
     """Return the Block C feature frame for one weather year, one row per taluka."""
     wx = load_weather(year)

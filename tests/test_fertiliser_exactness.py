@@ -150,6 +150,39 @@ def test_micronutrient_trigger_respects_the_threshold():
     assert fz.micronutrient_plan({**base, "def_Zn": 80.0})[0]["priority"] == "high"
 
 
+def test_farmer_micronutrient_verdict_overrides_the_taluka_share():
+    """A real reading from this field outranks a taluka-wide average."""
+    base = {f"def_{m}": 0.0 for m in config.MICRONUTRIENTS}   # taluka: nothing deficient
+
+    # The taluka average says Zn is fine everywhere; the farmer's own card
+    # says low. The farmer's card wins.
+    got = fz.micronutrient_plan(base, farmer_micro={"Zn": "low"})
+    assert [m["component"] for m in got] == ["Zn"]
+    entry = got[0]
+    assert entry["source"] == "farmer soil health card"
+    assert entry["deficient_pct"] is None       # not a taluka share -- don't invent one
+    assert entry["priority"] == "high"
+
+    # The reverse: the taluka average is well past the trigger, but the
+    # farmer's own card says sufficient -- the correction is suppressed.
+    saturated = {**base, "def_S": 90.0}
+    assert fz.micronutrient_plan(saturated, farmer_micro={"S": "normal"}) == []
+
+    # A component the farmer's card is silent on still falls back to the
+    # taluka distribution, unaffected by verdicts on other components.
+    got2 = fz.micronutrient_plan(saturated, farmer_micro={"Zn": "low"})
+    assert {m["component"] for m in got2} == {"S", "Zn"}
+    assert next(m for m in got2 if m["component"] == "S")["source"] == "taluka SHC distribution"
+
+
+def test_farmer_micronutrient_entries_sort_before_taluka_ones():
+    """A confirmed deficiency is a more certain statement than a taluka share."""
+    base = {f"def_{m}": 99.0 for m in config.MICRONUTRIENTS}  # taluka: everything deficient
+    got = fz.micronutrient_plan(base, farmer_micro={"Cu": "low"})
+    assert got[0]["component"] == "Cu"
+    assert got[0]["source"] == "farmer soil health card"
+
+
 def test_sulphur_swap_conserves_phosphorus():
     products = {"DAP": 100.0, "Urea": 200.0, "MOP": 50.0}
     micro = [{"component": "S", "deficient_pct": 90.0}]

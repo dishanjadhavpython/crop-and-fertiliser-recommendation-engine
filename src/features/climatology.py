@@ -44,16 +44,24 @@ TREND_VARS = ["NI_N", "NI_P", "NI_K", "NI_OC", "ph_stress", "ec_saline",
               "def_S", "def_Fe", "def_Zn", "def_B", "def_Mn", "macro_NI"]
 
 
-@lru_cache(maxsize=1)
-def weather_panel() -> pd.DataFrame:
-    """Every weather year's Block C features, stacked."""
-    return pd.concat([agroclimate.build(y) for y in config.WEATHER_YEARS],
-                     ignore_index=True)
+@lru_cache(maxsize=None)
+def weather_panel(years: tuple[str, ...] | None = None) -> pd.DataFrame:
+    """Block C features for each weather year, stacked.
+
+    ``years`` restricts the window. That is what makes an **as-of** normal
+    possible: a recommendation for the 2015 Kharif season may only average the
+    weather that had already happened by then. Averaging all 29 years and
+    scoring 2015 with it would let the model know its own future, which no
+    farmer ever does.
+    """
+    years = tuple(years) if years else tuple(config.WEATHER_YEARS)
+    return pd.concat([agroclimate.build(y) for y in years], ignore_index=True)
 
 
-def climatology(panel: pd.DataFrame | None = None) -> pd.DataFrame:
+def climatology(panel: pd.DataFrame | None = None,
+                years: tuple[str, ...] | None = None) -> pd.DataFrame:
     """Per-taluka normals and inter-annual variability across the weather years."""
-    panel = weather_panel() if panel is None else panel
+    panel = weather_panel(tuple(years) if years else None) if panel is None else panel
     value_cols = [c for c in panel.columns
                   if c not in config.KEY + ["weather_year"]
                   and pd.api.types.is_numeric_dtype(panel[c])]

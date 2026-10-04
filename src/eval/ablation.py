@@ -190,17 +190,24 @@ def ranking_benchmark(df: pd.DataFrame, feats: list[str], seeds: int = 3) -> pd.
     df["score_ident"] = ranker.cross_val_scores(df, ["crop_id", "season_id"], seeds=seeds)
     df["score_ranker"] = ranker.cross_val_scores(df, feats, seeds=seeds)
 
-    # the engine as actually served: early fusion + per-crop blend weights
-    # taken from RANKING skill, with the rules carrying the crops the ranker
-    # genuinely cannot order
-    from src.models import blend
+    # The engine: early fusion + per-crop blend weights from RANKING skill.
+    # The weights are CROSS-FITTED — each fold's weights are learned only from
+    # the other folds' districts. The first version fitted them on the same
+    # out-of-fold scores it then evaluated, which flattered the blend.
+    from src.eval import engine_eval
     from src.pipeline import attach_fit_features
     fused = attach_fit_features(df.drop(columns=[c for c in df.columns
                                                  if c.startswith("fit_")], errors="ignore"))
     ffeats = model_features(fused)
-    fused["_learned"] = ranker.cross_val_scores(fused, ffeats, seeds=seeds)
-    alphas = blend.alpha_from_skill(blend.per_crop_ranking_skill(fused, "_learned"))
-    df["score_engine"] = blend.blend(fused, "_learned", "score_rules", alphas).to_numpy()
+    rules = engine_eval.rules_and_vetoes(fused)
+    plain = engine_eval.evaluate(fused, ffeats, "gkf", seeds=seeds, rules=rules, served=False)
+    df["score_engine"] = plain.frame["score_engine"].reindex(df.index).to_numpy()
+    # ...and the list a farmer is actually shown: vetoed crops and the crops
+    # the product cannot recommend (APY aggregates, tobacco) sink to the
+    # bottom. Not comparable with the unsunk rows above it — scorecard.py
+    # applies the same sink to every baseline for a like-for-like comparison.
+    served = engine_eval.evaluate(fused, ffeats, "gkf", seeds=seeds, rules=rules, served=True)
+    df["score_engine_served"] = served.frame["score_engine"].reindex(df.index).to_numpy()
 
     labels = [
         ("Random ranking", "score_random"),
@@ -210,7 +217,8 @@ def ranking_benchmark(df: pd.DataFrame, feats: list[str], seeds: int = 3) -> pd.
         ("LambdaMART, crop identity only", "score_ident"),
         ("Popularity prior, out-of-fold  <- the bar", "score_popularity"),
         ("LambdaMART + engineered features", "score_ranker"),
-        ("Full engine (early fusion + blend)  <- as served", "score_engine"),
+        ("Full engine (early fusion + cross-fitted blend)", "score_engine"),
+        ("Engine as served (+ veto, unrecommendable crops sunk)", "score_engine_served"),
     ]
     rows = []
     for name, col in labels:

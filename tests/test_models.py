@@ -94,7 +94,15 @@ def test_engineered_features_beat_crop_identity_alone():
 
 # --------------------------------------------------------- yield quantile ---
 def test_raw_yield_target_is_the_documented_mirage():
-    """Predicting raw yield scores ~0.93 while learning nothing about agronomy."""
+    """Predicting raw yield scores impressively while learning nothing about agronomy.
+
+    The absolute number has moved as the panel changed — 0.93 on one year of
+    labels, 0.82 on eight, 0.75 once climate features became as-of normals — so
+    it is not what this test pins. The *mirage* is: a model given only the crop
+    name matches the full feature set, and now beats it (0.787 against 0.750).
+    What looks like agronomy is crop-scale arithmetic, sugarcane at 74 t/ha
+    against sesamum at 0.27.
+    """
     from lightgbm import LGBMRegressor
     from src.eval.splits import group_kfold
 
@@ -111,10 +119,10 @@ def test_raw_yield_target_is_the_documented_mirage():
     ident = r2(Y["Yield"], oof(["crop_id", "season_id"], "Yield"))
     honest = r2(Y["yield_z"], oof(FEATS, "yield_z"))
 
-    assert full > 0.75                     # the impressive-looking number
-    # ... and a model given ONLY the crop name gets almost all of it. That gap
-    # is the whole point: it is what the soil and climate features are really
-    # worth on the raw target, and it is small.
+    assert full > 0.60                     # still an impressive-looking number
+    # ... and a model given ONLY the crop name gets all of it. That gap is the
+    # whole point: it is what the soil and climate features are really worth on
+    # the raw target, and it is nothing.
     assert full - ident < 0.10
     assert 0.10 < honest < 0.40            # the real signal
 

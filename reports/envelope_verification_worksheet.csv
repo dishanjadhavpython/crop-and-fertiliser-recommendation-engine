@@ -29,6 +29,11 @@ Groundnut,Arachis hypogaea,temperature_C,15.0,24,33,40,FAO EcoCrop; ICAR-DGR Jun
 Groundnut,Arachis hypogaea,pH,5.0,6.0,7.5,8.2,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
 Groundnut,Arachis hypogaea,drainage_ord,2.5,3.5,6.0,6.5,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
 Groundnut,Arachis hypogaea,min_depth_mm,450.0,,,,FAO EcoCrop; ICAR-DGR Junagadh PoP,False
+Indian Mustard,Brassica juncea,rainfall_mm,120.0,250,700,1400,FAO EcoCrop; ICAR-DRMR Bharatpur PoP,False
+Indian Mustard,Brassica juncea,temperature_C,7.0,15,27,34,FAO EcoCrop; ICAR-DRMR Bharatpur PoP,False
+Indian Mustard,Brassica juncea,pH,5.5,6.0,8.0,8.8,FAO EcoCrop; ICAR-DRMR Bharatpur PoP,False
+Indian Mustard,Brassica juncea,drainage_ord,2.0,3.0,5.5,6.5,FAO EcoCrop; ICAR-DRMR Bharatpur PoP,False
+Indian Mustard,Brassica juncea,min_depth_mm,400.0,,,,FAO EcoCrop; ICAR-DRMR Bharatpur PoP,False
 Linseed,Linum usitatissimum,rainfall_mm,120.0,250,750,1500,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
 Linseed,Linum usitatissimum,temperature_C,8.0,15,26,33,FAO EcoCrop; ICAR Project Coordinator (Linseed),False
 Linseed,Linum usitatissimum,pH,5.0,6.0,7.5,8.3,FAO EcoCrop; ICAR Project Coordinator (Linseed),False

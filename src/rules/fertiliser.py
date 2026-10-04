@@ -92,13 +92,33 @@ LEACH_SPLIT_THRESHOLDS = (0.60, 0.85)
 
 
 # ---------------------------------------------------------------- lookup ----
+#: The table's two context columns are used interchangeably: ``Crop_Season``
+#: carries "Irrigated"/"Rainfed" on 1,672 rows, and ``Crop_Irrigation`` carries
+#: variety-ish values such as "BT" and "1st year". So the season and the water
+#: regime are read out of *both* columns by vocabulary rather than by position.
+SEASON_TAGS = {"kharif": "Kharif", "pre-kharif": "Kharif", "rabi": "Rabi",
+               "summer": "Summer", "annual crop": "Whole Year"}
+WATER_TAGS = {"irrigated": "irrigated", "rainfed": "rainfed"}
+
+
+def _context_tags(irrigation, season) -> tuple[str | None, str | None]:
+    """(season, water regime) a published row actually states, or None."""
+    words = [str(v).strip().casefold() for v in (irrigation, season) if _norm(v) is not None]
+    return (next((SEASON_TAGS[w] for w in words if w in SEASON_TAGS), None),
+            next((WATER_TAGS[w] for w in words if w in WATER_TAGS), None))
+
+
 @lru_cache(maxsize=None)
 def _table() -> pd.DataFrame:
     """Clean inorganic rows with a numeric quantity — the per-hectare lookup."""
     f = load_fertiliser()
     f = f[(f["Category"] == "Inorganic") & (f["Unit"] == "Kg per Hectare")].copy()
     f["Quantity"] = pd.to_numeric(f["Quantity"], errors="coerce")
-    return f.dropna(subset=["Quantity", "Soil_Class", "Option"]).reset_index(drop=True)
+    out = f.dropna(subset=["Quantity", "Soil_Class", "Option"]).reset_index(drop=True)
+    tags = [_context_tags(i, s) for i, s in zip(out["Crop_Irrigation"], out["Crop_Season"])]
+    out["ctx_season"] = [t[0] for t in tags]
+    out["ctx_water"] = [t[1] for t in tags]
+    return out
 
 
 @lru_cache(maxsize=None)
@@ -137,6 +157,85 @@ def available_contexts(district: str, crop: str) -> pd.DataFrame:
     return sub[cols].drop_duplicates().reset_index(drop=True)
 
 
+def resolve_context(
+    district: str,
+    crop: str,
+    *,
+    want_season: str | None = None,
+    want_irrigated: bool | None = None,
+    variety: str | None = None,
+) -> dict | None:
+    """Which published context answers *this farmer's* season and water regime.
+
+    The table often publishes several recipes for one crop in one district —
+    Kharif and Rabi, irrigated and rainfed — and they differ by more than
+    rounding. Serving used to ignore the request entirely and fall back to
+    "Rainfed, then Kharif", so an irrigated Rabi farmer could be handed the
+    rainfed Kharif dose. This picks the row that states what was asked for,
+    preferring a context that names the requested season and water regime over
+    one that names neither, and never one that names a different season.
+    """
+    t = _table()
+    sub = t[(t["District"] == district.upper())
+            & (t["Crop"].str.casefold() == crop.casefold())]
+    if variety is not None:
+        sub = sub[sub["Crop_Variety"].astype("string").str.casefold() == variety.casefold()]
+    if sub.empty:
+        return None
+
+    want_water = None if want_irrigated is None else ("irrigated" if want_irrigated else "rainfed")
+    want_season = SEASON_TAGS.get((want_season or "").strip().casefold(), want_season)
+
+    def rank(row) -> tuple:
+        # pd.isna, not `is None`: a context that states nothing arrives as NaN
+        # out of the table, and treating that as "states something different"
+        # made the generic recipe lose to a contradicting one.
+        stated_season = None if pd.isna(row.ctx_season) else row.ctx_season
+        stated_water = None if pd.isna(row.ctx_water) else row.ctx_water
+        if want_season and stated_season == want_season:
+            s = 2
+        elif stated_season is None:
+            s = 1                      # says nothing about season: still usable
+        else:
+            s = 0                      # names a different season
+        if want_water and stated_water == want_water:
+            w = 2
+        elif stated_water is None:
+            w = 1
+        elif want_water is None and stated_water == "rainfed":
+            w = 1                      # unasked: the table's own default
+        else:
+            w = 0
+        variety_default = str(row.Crop_Variety).strip().casefold().startswith("all variety")
+        # ``min(s, w)`` leads, so a context that CONTRADICTS the request on
+        # either dimension loses to one that simply says nothing. Nagpur
+        # sunflower is the case that settles it: the district publishes an
+        # "Irrigated Kharif" recipe and a general one, and a rainfed farmer
+        # should be given the general recipe rather than the irrigated dose.
+        return min(s, w), s + w, s, w, variety_default
+
+    combos = sub[["Crop_Variety", "Crop_Irrigation", "Crop_Season",
+                  "ctx_season", "ctx_water"]].drop_duplicates()
+    best = max(combos.itertuples(index=False), key=rank)
+    return {"variety": _norm(best.Crop_Variety),
+            "irrigation": _norm(best.Crop_Irrigation),
+            "season": _norm(best.Crop_Season),
+            "states_season": best.ctx_season,
+            "states_water": best.ctx_water}
+
+
+def _narrow(sub: pd.DataFrame, col: str, want, strict: bool) -> pd.DataFrame:
+    if want is not None:
+        return sub[sub[col].astype("string").str.casefold() == want.casefold()]
+    if strict:
+        return sub[sub[col].isna()]
+    if sub[col].nunique(dropna=False) > 1:
+        # ambiguous and unspecified: prefer the rainfed / all-variety default
+        default = _default_for(col, sub)
+        return sub[sub[col].astype("string").fillna("") == (default or "")]
+    return sub
+
+
 def lookup(
     district: str,
     crop: str,
@@ -146,13 +245,25 @@ def lookup(
     irrigation: str | None = None,
     season: str | None = None,
     option: int = 1,
+    want_season: str | None = None,
+    want_irrigated: bool | None = None,
 ) -> dict | None:
     """Layer 2 — the exact table lookup. Returns products and nutrient target.
 
-    Unspecified context dimensions resolve to the table's single published
-    value when there is exactly one, so a caller who knows only
-    (district, crop, class) still gets the right row.
+    ``variety`` / ``irrigation`` / ``season`` name the table's own column values
+    and are matched verbatim — that is what the exactness test asserts against.
+    ``want_season`` / ``want_irrigated`` instead describe the *farmer's* query
+    and are resolved to a published context by ``resolve_context``.
     """
+    strict = False
+    if irrigation is None and season is None and (want_season or want_irrigated is not None):
+        ctx = resolve_context(district, crop, want_season=want_season,
+                              want_irrigated=want_irrigated, variety=variety)
+        if ctx:
+            variety = variety if variety is not None else ctx["variety"]
+            irrigation, season = ctx["irrigation"], ctx["season"]
+            strict = True              # pin the resolved row, NaNs included
+
     t = _table()
     sub = t[(t["District"] == district.upper()) & (t["Crop"].str.casefold() == crop.casefold())]
     if sub.empty:
@@ -164,12 +275,7 @@ def lookup(
     for col, want in (("Crop_Variety", variety),
                       ("Crop_Irrigation", irrigation),
                       ("Crop_Season", season)):
-        if want is not None:
-            sub = sub[sub[col].astype("string").str.casefold() == want.casefold()]
-        elif sub[col].nunique(dropna=False) > 1:
-            # ambiguous and unspecified: prefer the rainfed / all-variety default
-            default = _default_for(col, sub)
-            sub = sub[sub[col].astype("string").fillna("") == (default or "")]
+        sub = _narrow(sub, col, want, strict)
         if sub.empty:
             return None
 
@@ -240,7 +346,12 @@ def interpolate_target(crop_targets: dict[str, dict], test: SoilTest) -> dict[st
 
 
 def crop_targets(district: str, crop: str, **ctx) -> dict[str, dict]:
-    """The nutrient target at each of the three fertility classes."""
+    """The nutrient target at each of the three fertility classes.
+
+    All three classes are resolved in the **same** context. Resolving each one
+    separately let Low come from the rainfed row and High from the irrigated
+    one, so interpolating between them crossed two different recommendations.
+    """
     out = {}
     for cls in config.SOIL_CLASSES:
         hit = lookup(district, crop, cls, **ctx)
@@ -250,28 +361,47 @@ def crop_targets(district: str, crop: str, **ctx) -> dict[str, dict]:
 
 
 # ------------------------------------------------------ micronutrients L4 ----
-def micronutrient_plan(taluka_features: dict) -> list[dict]:
+def micronutrient_plan(
+    taluka_features: dict, farmer_micro: dict[str, str] | None = None
+) -> list[dict]:
     """Layer 4 — corrections for the six components the table ignores.
 
     The government recommendation uses N, P, K and OC. The Soil Health Card
     carries twelve components; sulphur, iron, zinc, copper, boron and manganese
     go completely unused despite deficiency rates that vary by up to 34
     percentage points between talukas. Closing that gap is real agronomy.
+
+    ``farmer_micro`` is the farmer's own card, keyed by the same short codes as
+    ``config.MICRONUTRIENTS``, valued "low"/"normal"/"high". A component with a
+    farmer verdict is decided by that verdict alone — a real reading from this
+    field outranks a taluka-wide average — and the taluka's ``def_{comp}`` share
+    is consulted only for components the card is silent on.
     """
+    farmer_micro = farmer_micro or {}
     plan = []
     for comp in config.MICRONUTRIENTS:
-        deficient_pct = float(taluka_features.get(f"def_{comp}", 0.0))
-        if deficient_pct <= config.MICRO_DEFICIENCY_TRIGGER_PCT:
-            continue
+        farmer_status = farmer_micro.get(comp)
+        if farmer_status is not None:
+            if farmer_status != "low":
+                continue
+            source, deficient_pct, priority = "farmer soil health card", None, "high"
+        else:
+            deficient_pct = float(taluka_features.get(f"def_{comp}", 0.0))
+            if deficient_pct <= config.MICRO_DEFICIENCY_TRIGGER_PCT:
+                continue
+            source = "taluka SHC distribution"
+            priority = "high" if deficient_pct > 70 else "moderate"
+
         spec = MICRONUTRIENT_CORRECTIONS[comp]
         entry = {
             "component": comp,
-            "deficient_pct": round(deficient_pct, 1),
+            "source": source,
+            "deficient_pct": round(deficient_pct, 1) if deficient_pct is not None else None,
             "critical_limit": spec["critical"],
             "product": spec["product"],
             "rate_kg_ha": spec["rate_kg_ha"],
             "note": spec["note"],
-            "priority": "high" if deficient_pct > 70 else "moderate",
+            "priority": priority,
         }
         if comp == "Zn":
             lockout = float(taluka_features.get("zn_lockout", 0.0))
@@ -279,7 +409,9 @@ def micronutrient_plan(taluka_features: dict) -> list[dict]:
                 entry["note"] += (f" Alkaline lockout is compounding here "
                                   f"(zn_lockout={lockout:.0f}); prefer a chelated source.")
         plan.append(entry)
-    return sorted(plan, key=lambda e: -e["deficient_pct"])
+    # A farmer-confirmed deficiency sorts first regardless of taluka share —
+    # it is the more certain statement, not a smaller one.
+    return sorted(plan, key=lambda e: (e["deficient_pct"] is not None, -(e["deficient_pct"] or 0)))
 
 
 def sulphur_substitution(products: dict[str, float], micro: list[dict]) -> dict | None:
@@ -344,6 +476,8 @@ class Recommendation:
     crop: str
     district: str
     soil_class: str
+    #: the published context this dose came from — season, water regime, variety
+    context: dict = field(default_factory=dict)
     exact_table: dict = field(default_factory=dict)
     interpolated_target: dict = field(default_factory=dict)
     micronutrients: list = field(default_factory=list)
@@ -360,24 +494,44 @@ def recommend(
     *,
     interpolate: bool = True,
     leach_percentile: float = 0.5,
+    want_season: str | None = None,
+    want_irrigated: bool | None = None,
     **ctx,
 ) -> Recommendation | None:
     """Full S4 pipeline for one crop.
 
     With ``interpolate=False`` this returns the government table verbatim —
-    the mode the exactness test asserts against.
+    the mode the exactness test asserts against. ``want_season`` and
+    ``want_irrigated`` carry the farmer's query; the context they resolve to is
+    pinned once here and used for every class, so the interpolation stays
+    inside one published recommendation.
     """
     from src.rules.soil_class import taluka_soil_test
 
     test = soil_test or taluka_soil_test(taluka_features)
     soil_class = classify(test)
 
+    resolved = None
+    if not ctx.get("irrigation") and not ctx.get("season") and (
+            want_season or want_irrigated is not None):
+        resolved = resolve_context(district, crop, want_season=want_season,
+                                   want_irrigated=want_irrigated,
+                                   variety=ctx.get("variety"))
+        if resolved:
+            ctx = {**ctx, "variety": ctx.get("variety") or resolved["variety"],
+                   "irrigation": resolved["irrigation"], "season": resolved["season"]}
+
     exact = lookup(district, crop, soil_class, **ctx)
     if exact is None:
         return None
 
     rec = Recommendation(crop=exact["crop"], district=exact["district"],
-                         soil_class=soil_class, exact_table=exact)
+                         soil_class=soil_class, exact_table=exact,
+                         context={"season": exact["season"],
+                                  "irrigation": exact["irrigation"],
+                                  "variety": exact["variety"],
+                                  "states_season": (resolved or {}).get("states_season"),
+                                  "states_water": (resolved or {}).get("states_water")})
 
     if interpolate:
         targets = crop_targets(district, crop, **ctx)
@@ -396,7 +550,7 @@ def recommend(
     else:
         rec.interpolated_target = dict(exact["target"])
 
-    rec.micronutrients = micronutrient_plan(taluka_features)
+    rec.micronutrients = micronutrient_plan(taluka_features, farmer_micro=test.micronutrients)
     rec.sulphur_swap = sulphur_substitution(exact["products"], rec.micronutrients)
 
     n_target = rec.interpolated_target.get("N") or 0.0
@@ -417,7 +571,7 @@ def recommend(
 def _state_medians() -> pd.DataFrame:
     t = _table()
     keys = ["Crop", "Crop_Variety", "Crop_Irrigation", "Crop_Season",
-            "Soil_Class", "Option", "Fertilizer"]
+            "ctx_season", "ctx_water", "Soil_Class", "Option", "Fertilizer"]
     agg = t.groupby(keys, dropna=False).agg(
         qty_median=("Quantity", "median"),
         qty_min=("Quantity", "min"),
@@ -438,10 +592,15 @@ def state_median_lookup(
     irrigation: str | None = None,
     season: str | None = None,
     option: int = 1,
+    want_season: str | None = None,
+    want_irrigated: bool | None = None,
 ) -> dict | None:
     """State-wide median recipe, for crop-district pairs the table omits.
 
     Explicitly an estimate, never presented as the published recommendation.
+    The farmer's season and water regime steer it exactly as they steer the
+    district lookup — an estimate may be uncertain in magnitude, but it should
+    not also be an answer to a different question.
     """
     m = _state_medians()
     sub = m[(m["Crop"].str.casefold() == crop.casefold())
@@ -449,6 +608,17 @@ def state_median_lookup(
             & (m["Option"] == option)]
     if sub.empty:
         return None
+
+    if irrigation is None and season is None and (want_season or want_irrigated is not None):
+        want_water = None if want_irrigated is None else (
+            "irrigated" if want_irrigated else "rainfed")
+        tag = SEASON_TAGS.get((want_season or "").strip().casefold(), want_season)
+        match = sub[(sub["ctx_season"] == tag) | sub["ctx_season"].isna()] if tag else sub
+        if want_water:
+            tighter = match[(match["ctx_water"] == want_water) | match["ctx_water"].isna()]
+            match = tighter if not tighter.empty else match
+        if not match.empty:
+            sub = match
 
     for col, want in (("Crop_Variety", variety),
                       ("Crop_Irrigation", irrigation),

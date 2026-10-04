@@ -6,6 +6,7 @@ coverage. These tests pin down every claim made in
 data drop cannot silently change the panel's shape.
 """
 import hashlib
+from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -45,15 +46,31 @@ def test_weather_years_are_distinct_files():
     assert len(set(digests.values())) == len(digests), f"duplicate weather files: {digests}"
 
 
-def test_the_mislabelled_file_is_not_referenced():
-    bad = config.RAW / "maharashtra_daily_weather_taluka_2022-04-01_to_2023-03-31.csv"
-    assert bad not in config.F_WEATHER_BY_YEAR.values()
+def test_the_rejected_duplicate_is_quarantined_and_the_real_year_took_its_name():
+    """The delivered 2022-23 file was a copy of the 2025-26 one.
+
+    That name is now referenced, because the genuine 2022-23 weather occupies
+    it — so the check that matters is no longer "is this name absent" but
+    "is the copy out of reach, and does the file behind the name say 2022-23".
+    The copy is kept rather than deleted: what was delivered is part of the
+    record.
+    """
+    rejected = (config.RAW / "_rejected"
+                / "maharashtra_daily_weather_taluka_2022-04-01_to_2023-03-31.csv")
+    assert rejected.exists(), "the rejected duplicate should be kept, not deleted"
+    assert rejected not in config.F_WEATHER_BY_YEAR.values()
+
+    wx = load_weather("2022-23")
+    assert str(wx["Date"].min().date()) == "2022-04-01"
+    assert str(wx["Date"].max().date()) == "2023-03-31"
 
 
-def test_weather_covers_every_day_including_the_leap_year():
+def test_weather_covers_every_day_including_every_leap_year():
+    """Six of the 29 agricultural years contain a 29 February, not just one."""
     for year, wx in load_weather_years().items():
+        lo, hi = (date.fromisoformat(d) for d in config.WEATHER_YEAR_SPANS[year])
+        expected = (hi - lo).days + 1
         days = wx.groupby(config.KEY)["Date"].nunique()
-        expected = 366 if year == "2023-24" else 365
         assert days.eq(expected).all(), f"{year}: expected {expected} days"
 
 

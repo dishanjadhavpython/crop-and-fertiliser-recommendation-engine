@@ -32,14 +32,17 @@ from src.data.load import load_apy, load_apy_panel
 from src.features.build_store import build_feature_store, feature_columns
 
 
-@lru_cache(maxsize=4)
-def district_features(with_context_z: bool = False, with_spatial: bool = False) -> pd.DataFrame:
+@lru_cache(maxsize=64)
+def district_features(with_context_z: bool = False, with_spatial: bool = False,
+                      years: tuple[str, ...] | None = None) -> pd.DataFrame:
     """Aggregate the taluka feature store to district grain.
 
     Weighted by SHC sample count. Also carries ``n_talukas`` and the summed
-    sample count, both of which are legitimate confidence signals.
+    sample count, both of which are legitimate confidence signals. ``years``
+    is passed straight through to the store, so a caller can ask for the
+    district as it looked **as of** a given crop year.
     """
-    store = build_feature_store(with_context_z, with_spatial)
+    store = build_feature_store(with_context_z, with_spatial, years=years)
     cols = feature_columns(store)
     w = store["n_samples"].to_numpy(dtype=float)
 
@@ -96,8 +99,21 @@ def build(with_context_z: bool = False, with_spatial: bool = False,
     apy["crop_yield_mean"] = crop_mean
     apy["crop_yield_std"] = crop_std
 
-    feats = district_features(with_context_z, with_spatial)
-    df = apy.merge(feats, on="District", how="inner", validate="m:1")
+    # Each crop year is joined to the district as it could have been known THEN:
+    # normals over the weather years that had already happened, plus — kept
+    # separate, and kept away from the ranker — the weather that year actually
+    # had. Before this, every row carried normals averaged over all 29 weather
+    # years, so a 2015 row knew 2022's monsoon.
+    frames = []
+    for year, rows in apy.groupby("Year", sort=True):
+        feats = district_features(with_context_z, with_spatial,
+                                  years=_asof_weather_years(year))
+        part = rows.merge(feats, on="District", how="inner", validate="m:1")
+        matched = district_year_weather(year)
+        if matched is not None:
+            part = part.merge(matched, on="District", how="left", validate="m:1")
+        frames.append(part)
+    df = pd.concat(frames, ignore_index=True)
     # Yield targets exist only for crops the district actually planted; the
     # S3 model trains on that subset, the ranker on the full candidate grid.
     df["has_yield"] = df["Yield"].notna() & (df["planted"] == 1)
@@ -110,6 +126,53 @@ def build(with_context_z: bool = False, with_spatial: bool = False,
     df["year_index"] = df["Year"].map(
         {y: i for i, y in enumerate(sorted(df["Year"].unique()))}).astype(int)
     return df.reset_index(drop=True)
+
+
+def _asof_weather_years(crop_year: str) -> tuple[str, ...]:
+    """The weather years a question asked in ``crop_year`` could already know.
+
+    A farmer choosing what to sow in 2015 knows every monsoon up to 2014 and
+    none after it. Strictly earlier, never the year itself: the season's own
+    weather is the thing being decided under, not an input to the decision.
+    """
+    cutoff = config.APY_WEATHER_MATCH.get(crop_year) or f"{crop_year[:4]}-{crop_year[7:9]}"
+    earlier = tuple(y for y in config.WEATHER_YEARS if y < cutoff)
+    # a crop year older than every weather year still needs a normal; the
+    # earliest available year is the least wrong answer, and it is flagged by
+    # n_weather_years in the store
+    return earlier or (config.WEATHER_YEARS[0],)
+
+
+@lru_cache(maxsize=32)
+def district_year_weather(crop_year: str) -> pd.DataFrame | None:
+    """The weather that crop year actually had, at district grain, prefixed ``wx_``.
+
+    Legitimate for the **yield** model, which explains a season after it
+    happened. Never for the ranker, which answers before it: ``model_features``
+    excludes these columns unless asked, and a test asserts it.
+    """
+    weather_year = config.APY_WEATHER_MATCH.get(crop_year)
+    if weather_year is None:
+        return None
+
+    from src.features import agroclimate
+
+    taluka = agroclimate.build(weather_year)
+    store = build_feature_store()[config.KEY + ["n_samples"]]
+    merged = taluka.merge(store, on=config.KEY, how="inner", validate="1:1")
+    value_cols = [c for c in merged.columns
+                  if c not in config.KEY + ["n_samples", "weather_year"]
+                  and pd.api.types.is_numeric_dtype(merged[c])]
+
+    rows = []
+    for district, g in merged.groupby("District", sort=True):
+        w = g["n_samples"].to_numpy(dtype=float)
+        w = w / w.sum() if w.sum() > 0 else np.full(len(g), 1 / len(g))
+        rec = {"District": district}
+        for c in value_cols:
+            rec[f"wx_{c}"] = float(np.average(g[c].to_numpy(dtype=float), weights=w))
+        rows.append(rec)
+    return pd.DataFrame(rows)
 
 
 def _add_unplanted_candidates(apy: pd.DataFrame) -> pd.DataFrame:
@@ -168,8 +231,15 @@ def target_columns() -> list[str]:
     return ["Yield", "yield_z", "relevance", "area_share", "area_share_district"]
 
 
-def model_features(df: pd.DataFrame, include_identity: bool = True) -> list[str]:
-    """Feature columns for the learned models, labels and keys excluded."""
+def model_features(df: pd.DataFrame, include_identity: bool = True,
+                   include_year_weather: bool = False) -> list[str]:
+    """Feature columns for the learned models, labels and keys excluded.
+
+    ``wx_*`` — the crop year's own weather — is excluded by default. It is not
+    a label, but for the ranker it is just as unusable: a farmer choosing a crop
+    in June cannot know what that season's rainfall will be. Only the yield
+    model, which explains a season afterwards, asks for it.
+    """
     leaky = {
         "Area", "Production", "Yield", "yield_z", "relevance",
         "area_share", "area_share_district", "crop_yield_mean", "crop_yield_std",
@@ -183,6 +253,8 @@ def model_features(df: pd.DataFrame, include_identity: bool = True) -> list[str]
         c for c in df.columns
         if c not in leaky | keys and pd.api.types.is_numeric_dtype(df[c])
     ]
+    if not include_year_weather:
+        cols = [c for c in cols if not c.startswith("wx_")]
     if not include_identity:
         cols = [c for c in cols if c not in ("crop_id", "season_id")]
     return cols

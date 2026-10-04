@@ -1,0 +1,7 @@
+timestamp,label,composite,composite_uncapped,measured_weight,gates,anchors,fc_margin,gt_margin,false_veto,metamorphic,fert_context,cold_rho,coverage_error,soil_f1,soil_calibration,inputs_effective,explanation
+2026-09-12 10:26,Phase 0 baseline,6.0,6.53,0.9,4/6,frozen now,0.111,0.06,0.009,1.0,0.7296,0.396,0.0044,,,0.9333,0.4
+2026-09-12 11:08,Phase 1 correctness fixes,7.75,7.75,0.9,6/6,frozen,0.111,0.06,0.009,1.0,1.0,0.396,0.0006,,,0.9333,0.6
+2026-09-12 11:26,"Phase 1b: duplicate columns dropped, served ranker bagged + monotone",7.85,7.85,0.9,6/6,frozen,0.112,0.066,0.009,1.0,1.0,0.387,0.0006,,,0.9333,0.6
+2026-09-12 12:23,"Phase 2-3: 29 weather years, as-of normals, year-matched yield weather",7.97,7.97,0.9,6/6,frozen,0.112,0.063,0.0084,1.0,1.0,0.432,0.0006,,,0.9333,0.6
+2026-10-03 23:40,Phase 4: 8-class soil fusion + card EC caution,6.0,7.96,0.9,4/6,frozen,0.112,0.063,0.0084,0.9997,1.0,0.432,0.0006,,,0.9333,0.6
+2026-10-04 00:18,Phase 4 re-run: test subprocesses given the engine packages,7.96,7.96,0.9,6/6,frozen,0.112,0.063,0.0084,0.9997,1.0,0.432,0.0006,,,0.9333,0.6

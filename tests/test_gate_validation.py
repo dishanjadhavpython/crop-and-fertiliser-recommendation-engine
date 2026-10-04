@@ -32,10 +32,23 @@ def test_grade_ordering_is_not_inverted(scored):
 
     Before the hard/soft split it rose (0.070 / 0.103 / 0.146), meaning the
     four-level grade ran backwards against practice.
+
+    Planted rate is asserted more loosely, and deliberately so. Under climate
+    normals averaged over 18-25 years rather than 3, S2 and S3 land within half
+    a percentage point of each other — 0.685 against 0.691, on 1,912 and 1,280
+    cells, which is well inside one standard error (~0.013). The claims this
+    file can honestly make are the ones the validation established: suitable is
+    planted far more often than vetoed, and the top class beats the marginal
+    one. The S2/S3 boundary is not resolvable at this sample size, and asserting
+    an order there would be pinning noise.
     """
     m = monotonicity(scored)
     assert m["area_share_monotone_decreasing"]
-    assert m["planted_rate_monotone_decreasing"]
+
+    rates = agreement_table(scored).set_index("suitability_class")["planted_rate"]
+    assert rates["S1"] > rates["S3"]
+    assert rates["S3"] > 3 * rates["N"]
+    assert abs(rates["S2"] - rates["S3"]) < 0.05       # a tie, not an inversion
 
 
 def test_false_veto_rate_stays_low(scored):
@@ -64,6 +77,25 @@ def test_lgp_no_longer_vetoes_anything_it_should_not(scored):
     blame = factor_blame(scored).set_index("limiting_factor")
     if "LGP" in blame.index:
         assert blame.loc["LGP", "false_veto_rate"] < 0.2
+
+
+def test_dharashiv_soybean_is_not_vetoed_for_a_short_growing_period(scored):
+    """The false veto that longer climate normals exposed.
+
+    Dharashiv plants soybean across 35-77% of its cropped area in every year of
+    the panel, and once the normals spanned 1997-2022 the gate vetoed it in all
+    eight — on length of growing period, at a score of 0.248, a hair under the
+    0.25 line. LGP measures the *rainfed* season and has no "too long" failure
+    mode, so a short one is a water shortfall rather than an impossibility. The
+    answer a farmer can act on is "this needs irrigation", not removal from the
+    list.
+    """
+    sub = scored[(scored["District"] == "DHARASHIV")
+                 & (scored["Crop"] == "Soyabean")
+                 & (scored["Season"] == "Kharif")]
+    assert len(sub) == 8
+    assert not sub["vetoed"].any()
+    assert sub["requires_irrigation"].all()
 
 
 def test_sugarcane_is_never_lgp_vetoed():

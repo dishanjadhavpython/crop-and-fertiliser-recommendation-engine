@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from scipy.stats import spearmanr
+from scipy.stats import spearmanr, wilcoxon
 
 
 # ------------------------------------------------------------- ranking ----
@@ -121,6 +121,72 @@ def r2(y_true, y_pred) -> float:
     ss_res = float(((y_true - y_pred) ** 2).sum())
     ss_tot = float(((y_true - y_true.mean()) ** 2).sum())
     return round(1 - ss_res / ss_tot, 3) if ss_tot > 0 else float("nan")
+
+
+# ------------------------------------------------------ significance ----
+def per_query_ndcg(df: pd.DataFrame, score_col: str, truth_col: str = "relevance",
+                   k: int = 5, group_cols=None) -> pd.DataFrame:
+    """One row per ranking query: its key columns and NDCG@k."""
+    group_cols = list(group_cols) if group_cols is not None else query_columns(df)
+    rows = []
+    for key, g in df.groupby(group_cols, sort=True):
+        if len(g) < 2:
+            continue
+        key = key if isinstance(key, tuple) else (key,)
+        rows.append({**dict(zip(group_cols, key)),
+                     "ndcg": ndcg_at_k(g[truth_col].to_numpy(), g[score_col].to_numpy(), k)})
+    return pd.DataFrame(rows)
+
+
+def district_paired_test(df: pd.DataFrame, score_a: str, score_b: str,
+                         truth_col: str = "relevance", k: int = 5,
+                         n_boot: int = 2000, seed: int = 42) -> dict:
+    """Is ranking ``score_b`` better than ``score_a``? Tested over districts.
+
+    A thousand ranking queries are not a thousand independent facts: every
+    query from one district shares that district's soil, climate and label
+    history, so a Wilcoxon over queries overstates significance by treating
+    siblings as strangers. The honest unit is the district. Each district's
+    mean NDCG delta is one observation; the Wilcoxon signed-rank test and a
+    percentile bootstrap (resampling districts) both run over those.
+    """
+    qa = per_query_ndcg(df, score_a, truth_col, k)
+    qb = per_query_ndcg(df, score_b, truth_col, k)
+    keys = [c for c in qa.columns if c != "ndcg"]
+    m = qa.merge(qb, on=keys, suffixes=("_a", "_b"))
+    m["delta"] = m["ndcg_b"] - m["ndcg_a"]
+    per_district = m.groupby("District")["delta"].mean()
+
+    d = per_district.to_numpy(dtype=float)
+    if np.allclose(d, 0.0):
+        p = 1.0
+    else:
+        p = float(wilcoxon(d, zero_method="zsplit").pvalue)
+
+    rng = np.random.default_rng(seed)
+    boots = rng.choice(d, size=(n_boot, len(d)), replace=True).mean(axis=1)
+    return {
+        "a": score_a, "b": score_b,
+        "ndcg_a": round(float(m["ndcg_a"].mean()), 4),
+        "ndcg_b": round(float(m["ndcg_b"].mean()), 4),
+        "delta": round(float(m["delta"].mean()), 4),
+        "district_mean_delta": round(float(d.mean()), 4),
+        "ci_low": round(float(np.quantile(boots, 0.025)), 4),
+        "ci_high": round(float(np.quantile(boots, 0.975)), 4),
+        "p_wilcoxon": round(p, 5),
+        "n_districts": int(len(d)),
+        "n_queries": int(len(m)),
+    }
+
+
+def holm(pvalues: dict[str, float]) -> dict[str, float]:
+    """Holm-Bonferroni adjusted p-values, for several arms tested at once."""
+    items = sorted(pvalues.items(), key=lambda kv: kv[1])
+    n, running, out = len(items), 0.0, {}
+    for i, (name, p) in enumerate(items):
+        running = max(running, min(1.0, (n - i) * p))
+        out[name] = round(running, 5)
+    return out
 
 
 # --------------------------------------------------------- calibration ----

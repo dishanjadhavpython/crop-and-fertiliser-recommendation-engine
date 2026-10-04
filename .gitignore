@@ -5,3 +5,14 @@ __pycache__/
 artifacts/
 data/interim/
 data/features/*.parquet
+
+# Data and models live in the private build-inputs bucket and are fetched by
+# the deploy pipeline; the sample Soil Health Cards carry farmers' names.
+data/
+soil health card/
+*.joblib
+.venv*/
+*.pdf
+Screenshot*.png
+.idea/
+.DS_Store

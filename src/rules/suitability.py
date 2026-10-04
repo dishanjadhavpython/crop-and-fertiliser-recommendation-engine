@@ -264,14 +264,25 @@ def score(crop: str, season: str, features: dict,
     hard_limiting = min(hard, key=hard.get) if hard else None
     hard_fails = bool(hard) and hard[hard_limiting] < 0.25
 
-    if irrigated:
-        best = total
-    else:
-        water_relieved = dict(factors)
-        for f in WATER_FACTORS:
-            if f in water_relieved and rain < req.rain_mm.opt_min:
-                water_relieved[f] = 1.0
-        best = min(water_relieved.values())
+    # The most favourable water scenario, computed the same way whether or not
+    # the caller says they irrigate. It used to be ``best = total`` under
+    # irrigation, which left the LGP factor unrelieved on that path only — so a
+    # short-duration Kharif crop could be vetoed for the farmer who *has* water
+    # and allowed for the one who does not. Answering "you cannot grow this"
+    # because the farmer told us they irrigate is the one direction a water
+    # scenario must never move the answer.
+    water_relieved = dict(factors)
+    if rain < req.rain_mm.opt_min:
+        water_relieved["rain"] = 1.0        # a shortfall irrigation can make up
+    # LGP is relieved unconditionally, unlike rain. It measures the *rainfed*
+    # season's length and has no "too long" failure mode, so a short growing
+    # period is always a water shortfall — precisely what irrigation or stored
+    # profile moisture answers. Relieving it only when rainfall ALSO fell short
+    # vetoed Dharashiv's soybean in all eight years, on up to 77% of the
+    # district's cropped area, at a gate score of 0.248. Excess rain stays a
+    # real veto, because no amount of irrigation undoes it.
+    water_relieved["LGP"] = 1.0
+    best = min(water_relieved.values())
 
     vetoed = hard_fails or best < 0.25
     needs_water = (not vetoed) and total < 0.25 <= best
@@ -366,7 +377,8 @@ def gate(candidates: list[str], season: str, features: dict,
     return survivors, vetoes
 
 
-def water_limited(features: dict, season: str, min_share: float = 0.5) -> bool:
+def water_limited(features: dict, season: str, min_share: float = 0.5,
+                  irrigated: bool = False) -> bool:
     """True when this taluka-season can crop, but mostly only with irrigation.
 
     Since the veto now fires only on physical impossibility, "water limited" is
@@ -375,7 +387,7 @@ def water_limited(features: dict, season: str, min_share: float = 0.5) -> bool:
     demonstration of why irrigation coverage is the highest-value dataset to
     add (plan §8, item 3).
     """
-    viable = [s for s in score_all(features, season) if not s.vetoed]
+    viable = [s for s in score_all(features, season, irrigated=irrigated) if not s.vetoed]
     if not viable:
         return False
     return sum(s.requires_irrigation for s in viable) / len(viable) >= min_share

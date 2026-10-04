@@ -60,6 +60,27 @@ def test_context_carries_what_the_strip_displays(client):
         assert key in ctx and ctx[key] is not None
 
 
+def test_recommend_accepts_all_twelve_soil_health_card_components(client):
+    """The card prints twelve values; the request body must carry all twelve."""
+    r = client.post("/recommend", json={
+        "district": "SOLAPUR", "taluka": "SANGOLE", "season": "Kharif",
+        "soil_test": {
+            "n_kg_ha": 400, "p_kg_ha": 17, "k_kg_ha": 190, "oc_pct": 0.6,
+            "ph": 6.8, "ec_status": "normal",
+            "sulphur_status": "low", "zinc_status": "low", "iron_status": "normal",
+            "copper_status": "normal", "boron_status": "normal", "manganese_status": "normal",
+        },
+    })
+    assert r.status_code == 200
+    d = r.json()
+    assert d["context"]["ph_source"] == "farmer soil health card"
+    assert d["context"]["ph_used"] == pytest.approx(6.8)
+    assert d["context"]["ec_source"] == "farmer soil health card"
+    by_component = {m["component"]: m for m in d["micronutrients"]}
+    assert by_component["S"]["source"] == "farmer soil health card"
+    assert by_component["Zn"]["source"] == "farmer soil health card"
+
+
 def test_unknown_taluka_is_a_404_not_a_crash(client):
     r = client.get("/recommend", params={"district": "X", "taluka": "Y", "season": "Rabi"})
     assert r.status_code == 404

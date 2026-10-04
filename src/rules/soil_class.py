@@ -19,11 +19,26 @@ from src import config
 
 @dataclass(frozen=True)
 class SoilTest:
-    """A farmer's measured Soil Health Card values."""
+    """A farmer's measured Soil Health Card values.
+
+    N/P/K/OC drive the fertility class below, exactly as the government table
+    does. ``ph``, ``ec_status`` and ``micronutrients`` carry the other eight
+    SHC components — they have no fertility-class role (the table itself is
+    only indexed by N/P/K/OC), but they do have a real place downstream: pH
+    and salinity are Liebig-gate inputs (see ``pipeline.recommend``, which
+    substitutes them for the taluka average when present), and micronutrient
+    status drives the L4 correction layer (``rules.fertiliser.micronutrient_plan``).
+    """
     n_kg_ha: float | None = None
     p_kg_ha: float | None = None
     k_kg_ha: float | None = None
     oc_pct: float | None = None
+    #: measured soil pH, same scale as the taluka's ph_class_value
+    ph: float | None = None
+    #: the card's own low/normal/high verdict for EC; "high" means saline
+    ec_status: str | None = None
+    #: short code (config.MICRONUTRIENTS) -> "low"/"normal"/"high" from the card
+    micronutrients: dict[str, str] | None = None
 
     def as_dict(self) -> dict[str, float | None]:
         return {"N": self.n_kg_ha, "P": self.p_kg_ha, "K": self.k_kg_ha, "OC": self.oc_pct}

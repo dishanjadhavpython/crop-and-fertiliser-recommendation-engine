@@ -49,14 +49,20 @@ def blend(
     rule_col: str,
     alphas: dict[str, float],
     ood_mask: np.ndarray | None = None,
-    group_cols=("District", "Season"),
+    group_cols=None,
 ) -> pd.Series:
     """Blend the two scores per query group.
 
     Rank normalisation happens *within* a query group, because a rank is only
-    meaningful against the other candidates for the same district and season.
-    Rows flagged out-of-distribution fall back to the rule score alone.
+    meaningful against the other candidates for the same query. On a panel the
+    query includes the year — grouping by (District, Season) alone pooled eight
+    years of candidates into one rank normalisation, so the evaluated blend was
+    not the blend a farmer is served. Rows flagged out-of-distribution fall
+    back to the rule score alone.
     """
+    from src.eval.metrics import query_columns
+
+    group_cols = list(group_cols) if group_cols is not None else query_columns(df)
     out = pd.Series(np.nan, index=df.index, name="score_blended")
     for _, g in df.groupby(list(group_cols)):
         learned = rank_norm(g[learned_col])
@@ -70,6 +76,36 @@ def blend(
             rules_all.loc[g.index] = rank_norm(g[rule_col]).to_numpy()
         out = out.where(~pd.Series(ood_mask, index=df.index), rules_all)
     return out
+
+
+#: how far below every surviving candidate a vetoed crop is placed; blended
+#: scores live in [0, 1], so any offset > 1 keeps the order unambiguous
+VETO_OFFSET = 2.0
+
+
+def served_scores(
+    df: pd.DataFrame,
+    learned_col: str,
+    rule_col: str,
+    alphas: dict[str, float],
+    vetoed: np.ndarray | None = None,
+    ood_mask: np.ndarray | None = None,
+    group_cols=None,
+) -> pd.Series:
+    """The score a farmer's list is actually ordered by — one function, two callers.
+
+    Serving (``pipeline.recommend``) and evaluation both go through here, so a
+    benchmark number describes the list a farmer is shown rather than a
+    related quantity. That was not true before: the benchmark blended the two
+    scores but never applied the hard veto, while serving removed vetoed crops
+    from the list outright. Here a vetoed crop sinks below every surviving
+    candidate, which is exactly what removal does to a ranking.
+    """
+    final = blend(df, learned_col, rule_col, alphas, ood_mask=ood_mask, group_cols=group_cols)
+    if vetoed is not None:
+        v = np.asarray(vetoed, dtype=bool)
+        final = final.where(~v, final - VETO_OFFSET)
+    return final.rename("score_served")
 
 
 def alpha_report(alphas: dict[str, float], per_crop_rho: pd.DataFrame) -> pd.DataFrame:
