@@ -130,7 +130,7 @@ CROP_FIELDS = {
     "reason", "yield_p10_t_ha", "yield_p50_t_ha", "yield_p90_t_ha",
     "yield_interval_note", "yield_class", "yield_class_confidence",
     "yield_regime", "yield_abstained", "factors", "requires_irrigation",
-    "evidence", "fertiliser",
+    "evidence", "needs", "fertiliser",
 }
 
 #: `RecommendContext`. `surveyed_soil` is the one the soil-photo check reads.
@@ -155,6 +155,30 @@ def test_response_carries_every_field_the_typescript_declares(client):
         assert CROP_FIELDS <= set(crop), (
             f"{crop['crop']} missing: {sorted(CROP_FIELDS - set(crop))}"
         )
+
+
+def test_every_scored_crop_says_what_it_needs(client):
+    """`FactorBreakdown` prints "here 22 C · likes 24-30 C" from `needs`.
+
+    It was empty on its first version — looked up by the yield table's name
+    ("Jowar") where the requirement table keys the fertiliser table's
+    ("Sorghum") — and the meters fell back to bare numbers with nothing said.
+    A crop the gate scored has an envelope by construction, so it must have
+    one here too, and it must be the one the gate used.
+    """
+    from src.ontology.crop_map import to_fertiliser_crop
+    from src.rules.crop_requirements import get
+
+    d = client.post("/recommend", json={
+        "district": "SOLAPUR", "taluka": "SANGOLE", "season": "Rabi", "top_k": 5,
+    }).json()
+    scored = [c for c in d["crops"] if c["factors"]]
+    assert scored, "no scored crop to check"
+    for crop in scored:
+        req = get(to_fertiliser_crop(crop["crop"]))
+        assert crop["needs"], f"{crop['crop']} has factors but no needs"
+        assert crop["needs"]["temp_c"] == [req.temp_c.opt_min, req.temp_c.opt_max]
+        assert crop["needs"]["min_depth_mm"] == req.min_depth_mm
 
 
 def test_surveyed_soil_is_description_the_photo_check_can_use(client):

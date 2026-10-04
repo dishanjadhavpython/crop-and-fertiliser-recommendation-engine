@@ -296,6 +296,11 @@ class CropAdvice:
     factors: dict = field(default_factory=dict)
     requires_irrigation: bool = False
     evidence: dict = field(default_factory=dict)
+    #: The crop's own optimum window for each factor, in the units `evidence`
+    #: uses, so a client can say "needs 18-30 C, here 22" instead of printing
+    #: a bare 0.84. Display only — the gate scores from `crop_requirements`,
+    #: never from this copy.
+    needs: dict = field(default_factory=dict)
     fertiliser: dict | None = None
 
 
@@ -610,6 +615,8 @@ def _build_advice(rank, row, suit, feats, district, taluka, test, soil_class,
         factors=dict(s.factors) if s and s.factors else {},
         requires_irrigation=bool(s.requires_irrigation) if s else False,
         evidence=dict(s.evidence) if s and s.evidence else {},
+        # Keyed like the gate's own lookup: by the fertiliser-table name.
+        needs=_needs(fert_crop) if fert_crop else {},
     )
 
     # ---- S3 yield: class first, band only where the model has skill --------
@@ -620,6 +627,29 @@ def _build_advice(rank, row, suit, feats, district, taluka, test, soil_class,
         adv.fertiliser = _fertiliser_plan(district, taluka, fert_crop, feats, test,
                                           pipe, season, irrigated)
     return adv
+
+
+def _needs(crop: str) -> dict:
+    """The optimum window of each factor, for display beside `evidence`.
+
+    Optimum, not absolute: a factor inside it scores 1.0, and the trapezoid's
+    outer limits are where it reaches zero — which is not what "what the crop
+    needs" means to the person reading it.
+    """
+    req = crop_requirement(crop)
+    if req is None:
+        return {}
+    return {
+        "rain_mm": [req.rain_mm.opt_min, req.rain_mm.opt_max],
+        "temp_c": [req.temp_c.opt_min, req.temp_c.opt_max],
+        "pH": [req.ph.opt_min, req.ph.opt_max],
+        "min_depth_mm": req.min_depth_mm,
+        "drainage_ord": [req.drainage.opt_min, req.drainage.opt_max],
+        "max_saline_pct": req.max_saline_pct,
+        "min_lgp_days": req.min_lgp_days,
+        "textures": list(req.preferred_textures),
+        "duration_days": req.duration_days,
+    }
 
 
 def _attach_yield(adv, apy_crop: str, district: str, season: str, pipe) -> None:
