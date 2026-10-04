@@ -15,6 +15,11 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
+# LightGBM is linked against the OpenMP runtime, which the slim image omits.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
